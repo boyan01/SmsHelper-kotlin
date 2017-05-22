@@ -1,0 +1,11 @@
+<resources>
+    <string name="app_name">SmsHelper</string>
+    <string name="notification_action_copy">复制</string>
+    <string name="notification_action_update_regex">验证码解析有误?</string>
+
+    <string name="toast_format" formatted="false">%s 已被复制到剪贴板</string>
+    <string name="hint_input_the_regex_to_match_code">输入匹配的正则表达式</string>
+    <string name="menu_action_save">保存</string>
+    <string name="toast_need_sms_permission_to_receive_sms">需要短信权限以接受短信</string>
+
+</resources>
