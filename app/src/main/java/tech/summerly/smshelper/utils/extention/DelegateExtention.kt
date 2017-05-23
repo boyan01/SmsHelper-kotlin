@@ -1,6 +1,5 @@
 package tech.summerly.smshelper.utils.extention
 
-import android.annotation.SuppressLint
 import android.content.Context
 import android.content.SharedPreferences
 import tech.summerly.smshelper.AppContext

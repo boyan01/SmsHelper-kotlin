@@ -1,5 +1,6 @@
 package tech.summerly.smshelper.activity
 
+import android.app.Activity
 import android.app.NotificationManager
 import android.content.ClipData
 import android.content.ClipboardManager
@@ -7,7 +8,6 @@ import android.content.Context
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
-import android.support.v7.app.AppCompatActivity
 import tech.summerly.smshelper.R
 import tech.summerly.smshelper.data.entity.Message
 import tech.summerly.smshelper.receiver.MessageReceiver
@@ -15,7 +15,7 @@ import tech.summerly.smshelper.receiver.MessageReceiver.Companion.ID_NOTIFICATIO
 import tech.summerly.smshelper.receiver.MessageReceiver.Companion.NAME_MESSAGE
 import tech.summerly.smshelper.utils.extention.toast
 
-class NotificationHandleActivity : AppCompatActivity() {
+class NotificationHandleActivity : Activity() {
 
     companion object {
         val ACTION_COPY = "tech.summerly.action.copy"

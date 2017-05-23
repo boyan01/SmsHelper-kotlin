@@ -2,14 +2,14 @@ package tech.summerly.smshelper.activity
 
 import android.Manifest
 import android.annotation.TargetApi
+import android.app.Activity
 import android.content.pm.PackageManager
 import android.os.Build
-import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import tech.summerly.smshelper.R
 import tech.summerly.smshelper.utils.extention.toast
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : Activity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

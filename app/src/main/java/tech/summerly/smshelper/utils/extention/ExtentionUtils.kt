@@ -1,10 +1,7 @@
 package tech.summerly.smshelper.utils.extention
 
 import android.content.Context
-import android.content.res.Resources
 import android.os.Build
-import android.support.annotation.ColorInt
-import android.support.annotation.ColorRes
 import android.support.annotation.IdRes
 import android.util.Log
 import android.widget.Toast
@@ -24,4 +21,12 @@ fun Any.log(message: String?, tag: String = this.javaClass.name.replace("tech.su
 
 fun Context.toast(message: String, length: Int = Toast.LENGTH_SHORT) {
     Toast.makeText(this, message, length).show()
+}
+
+fun Context.color(@IdRes id: Int): Int {
+    if (Build.VERSION.SDK_INT >= 23) {
+        return this.getColor(id)
+    } else {
+        return this.resources.getColor(id)
+    }
 }

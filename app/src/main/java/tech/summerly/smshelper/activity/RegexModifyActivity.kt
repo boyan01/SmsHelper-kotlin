@@ -1,9 +1,9 @@
 package tech.summerly.smshelper.activity
 
+import android.app.Activity
+import android.os.Build
 import android.os.Bundle
-import android.support.v4.content.ContextCompat
 import android.support.v4.graphics.drawable.DrawableCompat
-import android.support.v7.app.AppCompatActivity
 import android.text.Editable
 import android.text.Spannable
 import android.text.SpannableString
@@ -14,14 +14,15 @@ import android.view.MenuInflater
 import android.view.MenuItem
 import kotlinx.android.synthetic.main.activity_regex_modify.*
 import tech.summerly.smshelper.R
-import tech.summerly.smshelper.data.entity.Message
 import tech.summerly.smshelper.data.dao.SmsConfigDao
+import tech.summerly.smshelper.data.entity.Message
 import tech.summerly.smshelper.receiver.MessageReceiver
+import tech.summerly.smshelper.utils.extention.color
 import tech.summerly.smshelper.utils.extention.log
 import tech.summerly.smshelper.utils.extention.toast
 import java.util.regex.Pattern
 
-class RegexModifyActivity : AppCompatActivity() {
+class RegexModifyActivity : Activity() {
 
     var message: Message? = null
 
@@ -31,7 +32,11 @@ class RegexModifyActivity : AppCompatActivity() {
         message = intent.getSerializableExtra(MessageReceiver.NAME_MESSAGE) as Message?
         message?.let {
             textContent.text = it.content
-            supportActionBar?.title = it.number
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
+                actionBar?.title = it.number
+            } else {
+                title = it.number
+            }
             editRegex.addTextChangedListener(object : TextWatcher {
 
                 override fun afterTextChanged(s: Editable?) {
@@ -54,7 +59,7 @@ class RegexModifyActivity : AppCompatActivity() {
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         MenuInflater(this).inflate(R.menu.menu_modify_regex, menu)
         with(menu.findItem(R.id.menu_modify_regex_save)) {
-            DrawableCompat.setTint(icon, ContextCompat.getColor(applicationContext, R.color.colorContent))
+            DrawableCompat.setTint(icon, color(R.color.colorContent))
         }
         return super.onCreateOptionsMenu(menu)
     }
@@ -101,7 +106,7 @@ class RegexModifyActivity : AppCompatActivity() {
                 if (index == -1) {
                     break
                 }
-                val span = ForegroundColorSpan(ContextCompat.getColor(this@RegexModifyActivity, R.color.colorPrimary))
+                val span = ForegroundColorSpan(color(R.color.colorPrimary))
                 spannableString.setSpan(span, index, index + result.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
                 index += result.length
                 log("index : " + index)
