@@ -8,9 +8,9 @@
 
 # 例子 ( example )
 ## 简单情况:
-![simple](\images\simple.gif)
+![simple](/images/simple.gif)
 ## 复杂情况:
-![complex](\images\complex.gif)
+![complex](/images/complex.gif)
 
 # TODO
 1. 能够对默认正则进行更改
