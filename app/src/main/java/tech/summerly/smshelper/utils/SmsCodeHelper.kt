@@ -1,8 +1,7 @@
 package tech.summerly.smshelper.utils
 
-import tech.summerly.smshelper.bean.Message
+import tech.summerly.smshelper.data.entity.Message
 import tech.summerly.smshelper.data.dao.SmsConfigDao
-import tech.summerly.smshelper.data.source.SmsConfigDbHelper
 import tech.summerly.smshelper.utils.extention.DelegateExt
 import java.util.regex.Pattern
 

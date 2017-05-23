@@ -11,7 +11,7 @@ import android.support.v4.app.NotificationCompat
 import android.telephony.SmsMessage
 import tech.summerly.smshelper.R
 import tech.summerly.smshelper.activity.NotificationHandleActivity
-import tech.summerly.smshelper.bean.Message
+import tech.summerly.smshelper.data.entity.Message
 import tech.summerly.smshelper.utils.SmsCodeHelper
 import tech.summerly.smshelper.utils.extention.log
 

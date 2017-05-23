@@ -32,4 +32,9 @@ class MainActivity : AppCompatActivity() {
             requestToReceiveSms()
         }
     }
+
+    override fun onBackPressed() {
+        super.onBackPressed()
+        finish()
+    }
 }

@@ -29,11 +29,11 @@ class SmsConfigDbHelper constructor(context: Context = AppContext.instance) : SQ
     }
 
     override fun onCreate(db: SQLiteDatabase) {
-        val sql = "create table if not exists ${NAME_TABLE}(" +
-                "${ID} integer primary key autoincrement," + //id
-                "${NUMBER} varchar(20)," + //电话号码
-                "${CONTENT} varchar(200)" + // 内容
-                "${REGEX} varchar(50)" + //正则表达式
+        val sql = "create table if not exists $NAME_TABLE(" +
+                "$ID integer primary key autoincrement," + //id
+                "$NUMBER varchar(20)," + //电话号码
+                "$CONTENT varchar(200)," + // 内容
+                "$REGEX varchar(50)" + //正则表达式
                 ")"
         db.execSQL(sql)
     }

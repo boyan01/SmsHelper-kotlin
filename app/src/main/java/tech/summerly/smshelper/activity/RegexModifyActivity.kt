@@ -14,10 +14,8 @@ import android.view.MenuInflater
 import android.view.MenuItem
 import kotlinx.android.synthetic.main.activity_regex_modify.*
 import tech.summerly.smshelper.R
-import tech.summerly.smshelper.bean.Message
+import tech.summerly.smshelper.data.entity.Message
 import tech.summerly.smshelper.data.dao.SmsConfigDao
-import tech.summerly.smshelper.data.source.SmsConfigDbHelper
-import tech.summerly.smshelper.data.source.SmsConfigDbHelper.Companion.NAME_TABLE
 import tech.summerly.smshelper.receiver.MessageReceiver
 import tech.summerly.smshelper.utils.extention.log
 import tech.summerly.smshelper.utils.extention.toast

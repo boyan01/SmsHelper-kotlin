@@ -23,8 +23,13 @@ object SmsConfigDao {
     fun getRegexByNumber(number: String): String = with(SmsConfigDbHelper) {
         val sql = "select * from $NAME_TABLE where $NUMBER = ?"
         val cursor = SmsConfigDbHelper().readableDatabase.rawQuery(sql, arrayOf(number))
-        if (cursor.count > 0) {
-            val regex = cursor.getString(cursor.getColumnIndex(REGEX))
+        if (cursor != null && cursor.moveToFirst()) {
+            val index = cursor.getColumnIndex(REGEX)
+            if (index < 0) {
+                log("有相应列表项,但没找到对应的正则表达式")
+                return@with DEFAULT_REGEX
+            }
+            val regex = cursor.getString(index)
             cursor.close()
             return regex
         }
@@ -36,9 +41,9 @@ object SmsConfigDao {
         val dbHelper = SmsConfigDbHelper()
         val sql = "insert into ${SmsConfigDbHelper.NAME_TABLE} values(" +
                 "null," +
-                "$number," +
-                "$content," +
-                regex +
+                "'$number'," +
+                "'$content'," +
+                "'$regex'" +
                 ")"
         log(sql)
         dbHelper.writableDatabase.execSQL(sql)

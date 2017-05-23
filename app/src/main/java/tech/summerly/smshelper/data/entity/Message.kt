@@ -1,4 +1,4 @@
-package tech.summerly.smshelper.bean
+package tech.summerly.smshelper.data.entity
 
 import java.io.Serializable
 
