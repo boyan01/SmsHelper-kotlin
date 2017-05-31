@@ -31,7 +31,7 @@ class MessageReceiver : BroadcastReceiver() {
 
     companion object {
         const val ID_NOTIFICATION_CODE = 10141
-        val NAME_MESSAGE = "message"
+        val NAME_MESSAGE = "smsConfig"
         val NAME_ACTION = "action"
 
     }

@@ -35,6 +35,7 @@
         <activity
             android:name=".activity.RegexModifyActivity"
             android:label="修改匹配规则" />
+        <activity android:name=".activity.SmsConfigActivity"/>
     </application>
 
 </manifest>

@@ -8,14 +8,17 @@ import android.content.Context
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
+import android.support.v7.app.AppCompatActivity
 import tech.summerly.smshelper.R
+import tech.summerly.smshelper.activity.RegexModifyActivity.Companion.NAME_CONFIG
 import tech.summerly.smshelper.data.entity.Message
+import tech.summerly.smshelper.data.entity.SmsConfig
 import tech.summerly.smshelper.receiver.MessageReceiver
 import tech.summerly.smshelper.receiver.MessageReceiver.Companion.ID_NOTIFICATION_CODE
 import tech.summerly.smshelper.receiver.MessageReceiver.Companion.NAME_MESSAGE
 import tech.summerly.smshelper.utils.extention.toast
 
-class NotificationHandleActivity : Activity() {
+class NotificationHandleActivity : AppCompatActivity() {
 
     companion object {
         val ACTION_COPY = "tech.summerly.action.copy"
@@ -32,10 +35,12 @@ class NotificationHandleActivity : Activity() {
         val message = intent.getSerializableExtra(NAME_MESSAGE) as Message?
         message?.let {
             when (intent.getStringExtra(MessageReceiver.NAME_ACTION)) {
+
                 ACTION_COPY -> copyCodeToClipboard(it.code)//复制验证码
+
                 ACTION_UPDATE_REGEX -> {//修改匹配规则
                     val intent = Intent(this, RegexModifyActivity::class.java)
-                    intent.putExtra(NAME_MESSAGE, it)
+                    intent.putExtra(NAME_CONFIG, SmsConfig(number = it.number, content = it.content))
                     startActivity(intent)
                 }
             }

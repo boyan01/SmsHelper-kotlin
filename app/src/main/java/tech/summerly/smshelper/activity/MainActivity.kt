@@ -2,19 +2,24 @@ package tech.summerly.smshelper.activity
 
 import android.Manifest
 import android.annotation.TargetApi
-import android.app.Activity
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
+import android.support.v7.app.AppCompatActivity
+import kotlinx.android.synthetic.main.activity_main.*
 import tech.summerly.smshelper.R
 import tech.summerly.smshelper.utils.extention.toast
 
-class MainActivity : Activity() {
+class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         requestToReceiveSms()
+        btnConfigSms.setOnClickListener {
+            startActivity(Intent(this@MainActivity, SmsConfigActivity::class.java))
+        }
     }
 
     private fun requestToReceiveSms() {
