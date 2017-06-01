@@ -2,25 +2,51 @@ package tech.summerly.smshelper.activity
 
 import android.Manifest
 import android.annotation.TargetApi
-import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
-import android.support.v7.app.AppCompatActivity
-import kotlinx.android.synthetic.main.activity_main.*
+import android.preference.PreferenceManager
+import tech.summerly.smshelper.AppContext
 import tech.summerly.smshelper.R
+import tech.summerly.smshelper.activity.base.AppCompatPreferenceActivity
+import tech.summerly.smshelper.utils.extention.log
 import tech.summerly.smshelper.utils.extention.toast
 
-class MainActivity : AppCompatActivity() {
+@Suppress("DEPRECATION")
+class MainActivity : AppCompatPreferenceActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        addPreferencesFromResource(R.xml.main_preference)
         requestToReceiveSms()
-        btnConfigSms.setOnClickListener {
-            startActivity(Intent(this@MainActivity, SmsConfigActivity::class.java))
+        setUpPreference()
+    }
+
+
+    private fun setUpPreference() {
+        //配置 keyword
+        val preferenceDefaultKeyword = preferenceScreen.findPreference(getString(R.string.key_setting_default_keyword))
+        val keyword = PreferenceManager.getDefaultSharedPreferences(this)
+                .getString(getString(R.string.key_setting_default_keyword), getString(R.string.default_keyword))
+        log("keyword = $keyword")
+        preferenceDefaultKeyword.summary = getString(R.string.summary_setting_default_keyword_template, keyword)
+        preferenceDefaultKeyword.setOnPreferenceChangeListener { preference, newValue ->
+            preference.summary = getString(R.string.summary_setting_default_keyword_template, newValue)
+            true
+        }
+
+        //配置 default regex
+        val preferenceDefaultRegex = preferenceScreen.findPreference(getString(R.string.key_setting_default_regex))
+        val regex = PreferenceManager.getDefaultSharedPreferences(this)
+                .getString(getString(R.string.key_setting_default_regex), getString(R.string.default_regex))
+        log("regex = $regex")
+        preferenceDefaultRegex.summary = getString(R.string.summary_setting_default_regex_template, regex)
+        preferenceDefaultRegex.setOnPreferenceChangeListener { preference, newValue ->
+            preference.summary = getString(R.string.summary_setting_default_keyword_template, newValue)
+            true
         }
     }
+
 
     private fun requestToReceiveSms() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M
@@ -38,8 +64,11 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+
     override fun onBackPressed() {
         super.onBackPressed()
-        finish()
+        AppContext.instance.exit()
     }
+
+
 }

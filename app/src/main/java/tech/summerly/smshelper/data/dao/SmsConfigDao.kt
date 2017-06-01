@@ -1,5 +1,6 @@
 package tech.summerly.smshelper.data.dao
 
+import tech.summerly.smshelper.R
 import tech.summerly.smshelper.data.entity.SmsConfig
 import tech.summerly.smshelper.data.source.SmsConfigDbHelper
 import tech.summerly.smshelper.data.source.SmsConfigDbHelper.Companion.CONTENT
@@ -8,6 +9,7 @@ import tech.summerly.smshelper.data.source.SmsConfigDbHelper.Companion.NAME_TABL
 import tech.summerly.smshelper.data.source.SmsConfigDbHelper.Companion.NUMBER
 import tech.summerly.smshelper.data.source.SmsConfigDbHelper.Companion.REGEX
 import tech.summerly.smshelper.utils.extention.DelegateExt
+import tech.summerly.smshelper.utils.extention.string
 import tech.summerly.smshelper.utils.extention.log
 
 /**
@@ -16,20 +18,24 @@ import tech.summerly.smshelper.utils.extention.log
  *     e-mail : yangbinyhbn@gmail.com
  *     time   : 2017/5/22
  *     desc   :
- *     version: 1.0
+ *     version:
  * </pre>
  */
 object SmsConfigDao {
 
-    val DEFAULT_REGEX: String by lazy {
-        val regex by DelegateExt.preference("default_regex", "\\d{4,8}")
-        regex
-    }
 
     /**
      * 通过号码查找对应的正则表达式
      */
     fun getRegexByNumber(number: String): String = with(SmsConfigDbHelper.instance) {
+
+        //默认的验证码提出正则
+        val DEFAULT_REGEX: String by lazy {
+            val regex by DelegateExt.preference(
+                    string(R.string.key_setting_default_regex), string(R.string.default_regex))
+            regex
+        }
+
         val sql = "select * from $NAME_TABLE where $NUMBER = ?"
         val cursor = readableDatabase.rawQuery(sql, arrayOf(number))
         if (cursor != null && cursor.moveToFirst()) {

@@ -1,11 +1,48 @@
 <resources>
-    <string name="app_name">SmsHelper</string>
+    <string name="app_name">验证码复制器</string>
+
+    <!-- notification -->
     <string name="notification_action_copy">复制</string>
     <string name="notification_action_update_regex">验证码解析有误?</string>
 
-    <string name="toast_format" formatted="false">%s 已被复制到剪贴板</string>
     <string name="hint_input_the_regex_to_match_code">输入匹配的正则表达式</string>
-    <string name="menu_action_save">保存</string>
+
+    <!-- toast -->
     <string name="toast_need_sms_permission_to_receive_sms">需要短信权限以接受短信</string>
+    <string name="toast_format" formatted="false">%s 已被复制到剪贴板</string>
+
+
+    <!-- preference key name-->
+    <string name="key_setting_config_sms">setting_config_sms</string>
+    <string name="key_setting_auto_copy">setting_auto_copy</string>
+    <string name="key_setting_default_regex">setting_default_regex</string>
+    <string name="key_setting_feedback">setting_feedback</string>
+    <string name="key_setting_default_keyword">setting_default_keyword</string>
+
+    <!-- main activity setting title -->
+    <string name="title_setting_config_sms">配置短信正则</string>
+    <string name="title_setting_auto_copy">自动复制</string>
+    <string name="title_setting_default_regex">默认正则表达式</string>
+    <string name="title_setting_default_keyword">默认短信关键字</string>
+
+    <!-- setting preference summary -->
+    <string name="summary_setting_default_regex_template">当数据库无法匹配出接受到的验证那短信时,将使用此正则表达式.\n当前的表达式为: %1$s</string>
+    <string name="summary_setting_default_keyword_template">当接受到的短信包含此关键字时,将会识别为验证码短信,多个关键字请使用\\隔开.\n当前关键词为: %1$s</string>
+
+    <!-- menu -->
+    <string name="menu_action_save">保存</string>
+
+    <!-- regex modify activity -->
+    <string name="regex_modify_activity_title_message">来自 : %s</string>
+    <string name="regex_modify_activity_console_error">出错 :\n</string>
+    <string name="regex_modify_activity_console_regex">匹配到的文字有 :\n</string>
+
+    <!-- default preference -->
+    <string name="default_keyword">码\\code\\碼</string>
+    <string name="default_regex">\\d{4,6}</string>
+
+    <!-- activity title -->
+    <string name="title_activity_regex_modify">修改匹配规则</string>
+    <string name="title_activity_sms_config">匹配规则列表</string>
 
 </resources>

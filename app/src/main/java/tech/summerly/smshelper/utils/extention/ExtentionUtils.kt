@@ -5,6 +5,7 @@ import android.os.Build
 import android.support.annotation.IdRes
 import android.util.Log
 import android.widget.Toast
+import tech.summerly.smshelper.AppContext
 
 /**
  * <pre>
@@ -16,17 +17,29 @@ import android.widget.Toast
  * </pre>
  */
 fun Any.log(message: String?, tag: String = this.javaClass.name.replace("tech.summerly.smshelper", "")) {
-    Log.i(tag, message)
+    Log.i(if (tag.isEmpty()) "empty" else tag, message)
 }
 
 fun Context.toast(message: String, length: Int = Toast.LENGTH_SHORT) {
     Toast.makeText(this, message, length).show()
 }
 
-fun Context.color(@IdRes id: Int): Int {
+@Suppress("DEPRECATION")
+fun color(@IdRes id: Int, context: Context = AppContext.instance): Int {
     if (Build.VERSION.SDK_INT >= 23) {
-        return this.getColor(id)
+        return context.getColor(id)
     } else {
-        return this.resources.getColor(id)
+        return context.resources.getColor(id)
     }
+}
+
+fun string(@IdRes stringId: Int) = AppContext.instance.getString(stringId)!!
+
+fun string(@IdRes stringId: Int, vararg formatArgs: Any) = AppContext.instance.getString(stringId, formatArgs)
+
+fun StringBuilder.clear() {
+    if (isEmpty()) {
+        return
+    }
+    delete(0, length)
 }

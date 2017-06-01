@@ -4,7 +4,6 @@
     android:id="@+id/listSmsConfig"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="16dp"
     tools:context="tech.summerly.smshelper.activity.SmsConfigActivity"
     tools:listitem="@layout/item_sms_config">
 

@@ -13,6 +13,5 @@ import java.io.Serializable
  */
 data class Message(val number: String, val content: String) : Serializable {
     var code: String = ""
-    var isCodeMessage: Boolean = false
 }
 

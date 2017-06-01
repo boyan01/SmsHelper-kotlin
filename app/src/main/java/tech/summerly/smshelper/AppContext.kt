@@ -1,5 +1,6 @@
 package tech.summerly.smshelper
 
+import android.app.Activity
 import android.app.Application
 import tech.summerly.smshelper.utils.extention.DelegateExt
 import kotlin.properties.Delegates
@@ -22,9 +23,22 @@ class AppContext : Application() {
     override fun onCreate() {
         super.onCreate()
         instance = this
-        var keyword by DelegateExt.preference("keyword", "")
-        if (keyword.isEmpty()) {
-            keyword = "\\码\\code\\碼" //这个操作将保存默认 keyword 到相应的 preference 中
+    }
+
+    private val activities = mutableListOf<Activity>()
+
+    fun register(activity: Activity) {
+        activities.add(activity)
+    }
+
+    fun unRegister(activity: Activity) {
+        activities.remove(activity)
+    }
+
+    fun exit() {
+        val activityList = activities.toList()
+        activityList.forEach {
+            it.finish()
         }
     }
 }

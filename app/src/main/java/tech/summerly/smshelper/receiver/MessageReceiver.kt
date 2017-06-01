@@ -13,6 +13,7 @@ import tech.summerly.smshelper.R
 import tech.summerly.smshelper.activity.NotificationHandleActivity
 import tech.summerly.smshelper.data.entity.Message
 import tech.summerly.smshelper.utils.SmsCodeHelper
+import tech.summerly.smshelper.utils.extention.DelegateExt
 import tech.summerly.smshelper.utils.extention.log
 
 class MessageReceiver : BroadcastReceiver() {
@@ -22,8 +23,10 @@ class MessageReceiver : BroadcastReceiver() {
         val message = parseMessage(pdus, intent.getStringExtra("format"))
         message?.let {
             SmsCodeHelper.parse(it)
-            if (it.isCodeMessage) {
+            if (!it.code.isEmpty()) {
                 showContentInfo(it, context)
+            } else {
+                log("不是验证码短信,不进行处理.")
             }
         }
 
@@ -65,6 +68,8 @@ class MessageReceiver : BroadcastReceiver() {
      * 弹出验证码解析结果的 notification
      */
     private fun showContentInfo(message: Message, context: Context) {
+
+
         //添加通知处理操作
         val intent = Intent(context, NotificationHandleActivity::class.java)
         intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
@@ -75,6 +80,14 @@ class MessageReceiver : BroadcastReceiver() {
         copy.putExtra(NAME_ACTION, NotificationHandleActivity.ACTION_COPY)
         val copyIntent = getActivity(context, 100,
                 copy, FLAG_UPDATE_CURRENT)
+
+        //如果打开了自动复制选项
+        val isAutoCopy by DelegateExt.preference(context.getString(R.string.key_setting_auto_copy), false)
+        if (isAutoCopy) {
+            log("自动复制...")
+            context.startActivity(copy)
+            return
+        }
 
         //action : 修改当前号码对应的正则表达式
         val update = Intent(intent)

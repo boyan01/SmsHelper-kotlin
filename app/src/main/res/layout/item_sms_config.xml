@@ -1,35 +1,59 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:orientation="vertical">
-
-    <FrameLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:padding="8dp">
-
-        <TextView
-            android:id="@+id/textNumber"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            tools:text="126656656" />
-
-        <TextView
-            android:id="@+id/textRegex"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="end"
-            tools:text="\d{6}" />
-
-    </FrameLayout>
+    android:layout_height="wrap_content">
 
     <TextView
-        android:id="@+id/textContent"
+        android:id="@+id/textDelete"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:textSize="18sp"
+        android:visibility="gone"
+        tools:text="已删除的文字" />
+
+
+    <LinearLayout
+        android:id="@+id/ll_holder"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:maxLines="2"
-        android:padding="4dp"
-        tools:text="【知乎】帐号安全验证码是 511425，10 分钟内有效。" />
-</LinearLayout>
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="8dp"
+        tools:visibility="visible">
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="4dp">
+
+            <TextView
+                android:id="@+id/textNumber"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="@color/colorBlack"
+                android:textSize="16sp"
+                tools:text="126656656" />
+
+            <TextView
+                android:id="@+id/textRegex"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="end"
+                android:textColor="@color/colorBlack"
+                android:textSize="14sp"
+                tools:text="\d{6}" />
+
+        </FrameLayout>
+
+        <TextView
+            android:id="@+id/textContent"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:maxLines="2"
+            android:textSize="15sp"
+            tools:text="【知乎】帐号安全验证码是 511425，1\n0 分钟内有效。" />
+    </LinearLayout>
+
+
+</FrameLayout>

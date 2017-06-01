@@ -2,6 +2,7 @@ package tech.summerly.smshelper.utils.extention
 
 import android.content.Context
 import android.content.SharedPreferences
+import android.preference.PreferenceManager
 import tech.summerly.smshelper.AppContext
 import kotlin.reflect.KProperty
 
@@ -15,14 +16,20 @@ import kotlin.reflect.KProperty
  * </pre>
  */
 object DelegateExt {
-    fun <T> preference(name: String, default: T, context: Context = AppContext.instance) = Preference(context, name, default)
+    fun <T> preference(name: String, default: T, context: Context = AppContext.instance)
+            = Preference(context, name, default)
 }
 
 class Preference<T>(private val context: Context, private val name: String, private val default: T) {
-    private val PREF_TITLE = "sms_helper"
+
+    companion object {
+        val PREF_DEFAULT: String by lazy {
+            PreferenceManager.getDefaultSharedPreferencesName(AppContext.instance)
+        }
+    }
 
     private val pref: SharedPreferences by lazy {
-        context.getSharedPreferences(PREF_TITLE, Context.MODE_PRIVATE)
+        context.getSharedPreferences(PREF_DEFAULT, Context.MODE_PRIVATE)
     }
 
 
@@ -48,14 +55,19 @@ class Preference<T>(private val context: Context, private val name: String, priv
         res as T
     }
 
-    private fun putPreference(name: String, value: T) = with(pref.edit()) {
-        when (value) {
-            is Long -> putLong(name, value)
-            is String -> putString(name, value)
-            is Int -> putInt(name, value)
-            is Boolean -> putBoolean(name, value)
-            is Float -> putFloat(name, value)
-            else -> throw IllegalArgumentException("This type can't be saved into Preferences")
+    private fun putPreference(name: String, value: T) {
+
+        val editor = pref.edit()
+        with(editor) {
+            when (value) {
+                is Long -> putLong(name, value)
+                is String -> putString(name, value)
+                is Int -> putInt(name, value)
+                is Boolean -> putBoolean(name, value)
+                is Float -> putFloat(name, value)
+                else -> throw IllegalArgumentException("This type can't be saved into Preferences")
+            }
         }
-    }.apply()
+        editor.apply()
+    }
 }

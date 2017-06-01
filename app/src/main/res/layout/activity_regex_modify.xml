@@ -11,15 +11,43 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <TextView
-            android:id="@+id/textContent"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="center|start"
-            android:textSize="16sp"
-            tools:text="学校把大零钱罐和一大篮红鼻子交到我面前时我基本是一脸懵逼的状态，一是因为我那时英语本就不太好，交代给我事我就听懂了“零钱罐的钱收集的钱是帮助孩子的”，而具体怎么帮如何筹款那些复杂的英文我一句也没听懂。二则是我带的筹款小队没有一个华裔，我只能靠着蹩脚的英语和张牙舞爪的手势跟他们沟通，效果非常不好。
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/textMessageTitle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="8dp"
+                android:textColor="@color/colorBlack"
+                android:textSize="20sp"
+                tools:text="来自 : 1654545" />
+
+            <TextView
+                android:id="@+id/textContent"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center|start"
+                android:lineSpacingExtra="4dp"
+                android:maxLines="11"
+                android:padding="8dp"
+                android:textSize="16sp"
+                tools:text="学校把大零钱罐和一大篮红鼻子交到我面前时我基本是一脸懵逼的状态，一是因为我那时英语本就不太好，交代给我事我就听懂了“零钱罐的钱收集的钱是帮助孩子的”，而具体怎么帮如何筹款那些复杂的英文我一句也没听懂。二则是我带的筹款小队没有一个华裔，我只能靠着蹩脚的英语和张牙舞爪的手势跟他们沟通，效果非常不好。
 他们说了一大堆我听不懂的话，我也说了一大堆他们听不懂的话，这种情况一直持续到临上街时，我自暴自弃放弃语言交流，拿起篮子里的红鼻子戴上，并示意让他们也戴上，然后一手拿着零钱罐一手挎着红鼻子篮就这么走到街上，心里想着逛一圈就回去，反正学校也没定个目标。
 " />
+
+            <TextView
+                android:id="@+id/textConsole"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:lineSpacingExtra="3dp"
+                android:padding="16dp"
+                android:textSize="14sp"
+                tools:text="error : is not a regex" />
+        </LinearLayout>
+
     </ScrollView>
 
 

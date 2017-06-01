@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <PreferenceCategory android:title="general setting">
+        <Preference
+            android:key="@string/key_setting_config_sms"
+            android:title="@string/title_setting_config_sms">
+            <!-- 打开 SmsConfigActivity -->
+            <intent android:action="tech.summerly.action.sms.config_all" />
+        </Preference>
+
+        <SwitchPreference
+            android:defaultValue="false"
+            android:key="@string/key_setting_auto_copy"
+            android:title="@string/title_setting_auto_copy" />
+
+        <EditTextPreference
+            android:defaultValue="@string/default_regex"
+            android:key="@string/key_setting_default_regex"
+            android:summary="@string/summary_setting_default_regex_template"
+            android:title="@string/title_setting_default_regex" />
+
+        <EditTextPreference
+            android:defaultValue="@string/default_keyword"
+            android:key="@string/key_setting_default_keyword"
+            android:summary="@string/summary_setting_default_keyword_template"
+            android:title="@string/title_setting_default_keyword" />
+
+    </PreferenceCategory>
+
+    <PreferenceCategory android:title="about">
+        <Preference android:title="版本 : 1.0" />
+        <Preference android:title="联系方式 : yangbinyhbn@gmail.com"
+            android:summary="qq"/>
+    </PreferenceCategory>
+
+</PreferenceScreen>

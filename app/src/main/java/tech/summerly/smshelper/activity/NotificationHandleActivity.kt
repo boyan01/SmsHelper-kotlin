@@ -48,9 +48,10 @@ class NotificationHandleActivity : AppCompatActivity() {
         finish()
     }
 
+    @Suppress("DEPRECATION")
     private fun copyCodeToClipboard(code: String) = with(getSystemService(Context.CLIPBOARD_SERVICE)) {
         //toast
-        toast(getString(R.string.toast_format).format(code))
+        toast(getString(R.string.toast_format, code))
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
             (this as ClipboardManager).primaryClip = ClipData.newPlainText("code", code)
