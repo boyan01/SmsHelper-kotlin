@@ -1,6 +1,5 @@
 package tech.summerly.smshelper.activity
 
-import android.app.Activity
 import android.app.NotificationManager
 import android.content.ClipData
 import android.content.ClipboardManager
@@ -11,6 +10,7 @@ import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import tech.summerly.smshelper.R
 import tech.summerly.smshelper.activity.RegexModifyActivity.Companion.NAME_CONFIG
+import tech.summerly.smshelper.data.dao.SmsConfigDao
 import tech.summerly.smshelper.data.entity.Message
 import tech.summerly.smshelper.data.entity.SmsConfig
 import tech.summerly.smshelper.receiver.MessageReceiver
@@ -36,11 +36,15 @@ class NotificationHandleActivity : AppCompatActivity() {
         message?.let {
             when (intent.getStringExtra(MessageReceiver.NAME_ACTION)) {
 
-                ACTION_COPY -> copyCodeToClipboard(it.code)//复制验证码
+                ACTION_COPY -> {//复制验证码
+                    copyCodeToClipboard(it.code)
+                }
 
                 ACTION_UPDATE_REGEX -> {//修改匹配规则
                     val intent = Intent(this, RegexModifyActivity::class.java)
-                    intent.putExtra(NAME_CONFIG, SmsConfig(number = it.number, content = it.content))
+                    val smsConfig = SmsConfigDao.getConfigByNumber(number = it.number)
+                    smsConfig.content = it.content
+                    intent.putExtra(NAME_CONFIG, smsConfig)
                     startActivity(intent)
                 }
             }

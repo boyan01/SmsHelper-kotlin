@@ -1,14 +1,14 @@
 package tech.summerly.smshelper.activity
 
-import android.app.DatePickerDialog
-import android.app.Dialog
-import android.graphics.drawable.Drawable
+import android.animation.Animator
+import android.animation.ObjectAnimator
+import android.animation.ValueAnimator
+import android.content.Intent
+import android.os.Build
 import android.os.Bundle
-import android.support.v4.app.DialogFragment
+import android.support.v4.content.ContextCompat
 import android.support.v4.graphics.drawable.DrawableCompat
 import android.support.v7.app.AlertDialog
-import android.support.v7.app.AppCompatActivity
-import android.support.v7.widget.AppCompatDrawableManager
 import android.text.Editable
 import android.text.Spannable
 import android.text.SpannableString
@@ -16,7 +16,12 @@ import android.text.TextWatcher
 import android.text.style.ForegroundColorSpan
 import android.view.Menu
 import android.view.MenuItem
+import android.view.View
+import android.view.animation.Animation
+import android.view.animation.AnimationUtils
+import android.view.animation.TranslateAnimation
 import kotlinx.android.synthetic.main.activity_regex_modify.*
+import kotlinx.android.synthetic.main.window_pop_regex.*
 import tech.summerly.smshelper.R
 import tech.summerly.smshelper.activity.base.BaseActivity
 import tech.summerly.smshelper.data.dao.SmsConfigDao
@@ -26,7 +31,11 @@ import tech.summerly.smshelper.utils.extention.color
 import tech.summerly.smshelper.utils.extention.log
 import tech.summerly.smshelper.utils.extention.toast
 import java.util.regex.Pattern
+import kotlin.properties.Delegates
 
+/**
+ * 此 activity 启动模式为 single task
+ */
 class RegexModifyActivity : BaseActivity() {
 
     companion object {
@@ -40,6 +49,98 @@ class RegexModifyActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_regex_modify)
+        init(intent)
+
+        val drawable = ContextCompat.getDrawable(this, R.drawable.ic_mode_comment_black_24dp)
+        DrawableCompat.setTint(drawable, color(R.color.colorAccent))
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+            textAttention.background = drawable
+        } else {
+            @Suppress("DEPRECATION")
+            textAttention.setBackgroundDrawable(drawable)
+        }
+        textAttention.setOnClickListener {
+            editRegex.setText(textAttention.text)
+            val animation = AnimationUtils.loadAnimation(this, R.anim.anim_window_pop_regex_gone)
+            textAttention.startAnimation(animation)
+            textAttention.visibility = View.GONE
+        }
+    }
+
+    /**
+     * 用于监听用户所选择的短信内容部分
+     */
+    var contentSelectionWatcher: Runnable by Delegates.notNull<Runnable>()
+
+
+    private val REGEX_TEMPLATE = "%s.*?%s"
+
+    /**
+     * 自动生成正则表达式,根据字符串start -> end 间的内容自动选择正则表达式
+     *
+     */
+    private fun getRegexByIndex(text: CharSequence, start: Int, end: Int): String {
+        val first = Math.min(start, end)
+        val second = Math.max(start, end)
+        val regex1 = when {
+            first == 0 -> "^"
+            first in 1..4 -> "(?<=^${text.substring(0, first).escape()})"
+            first >= 5 && first < text.length - 1 -> "(?<=${text.substring(first - 5, first).escape()})"//零宽度正回顾后发断言
+            else -> throw ArrayIndexOutOfBoundsException(start)
+        }
+
+        val regex2 = when {
+            second == text.length -> "$"
+            second < text.length && second >= text.length - 4 -> "(?=${text.substring(second, text.length).escape()}$)"
+            second < text.length - 4 && second >= 0 -> "(?=${text.substring(second, second + 5).escape()})"//零宽度正预测先行断言
+            else -> throw ArrayIndexOutOfBoundsException(start)
+        }
+        return REGEX_TEMPLATE.format(regex1, regex2)
+    }
+
+    private val REGEX_META_CHAR = "\\^$()*+?.[]{}|"
+
+    /**
+     * 将字符串进行正则转义,防止其被识别为正则表达式
+     */
+    private fun String.escape(): String {
+        var result = this
+        REGEX_META_CHAR.forEach {
+            result = result.replace(it.toString(), "\\$it")
+        }
+        return result
+    }
+
+
+    override fun onResume() {
+        super.onResume()
+        contentSelectionWatcher = Runnable {
+            if (textContent.selectionStart != textContent.selectionEnd) {
+                val regex = getRegexByIndex(textContent.text, textContent.selectionStart, textContent.selectionEnd)
+                log("自动生成的正则为 : $regex")
+                showRecommendRegex(regex)
+            }
+            textContent.postDelayed(contentSelectionWatcher, 500)
+        }
+        textContent.post(contentSelectionWatcher)
+    }
+
+
+    private fun showRecommendRegex(regex: String) {
+        if (textAttention.visibility != View.VISIBLE) {
+            textAttention.startAnimation(AnimationUtils.loadAnimation(this, R.anim.anim_widow_pop_regex_show))
+            textAttention.visibility = View.VISIBLE
+        }
+        textAttention.text = regex
+    }
+
+    override fun onPause() {
+        super.onPause()
+        textContent.removeCallbacks(contentSelectionWatcher)
+    }
+
+
+    private fun init(intent: Intent) {
         smsConfig = intent.getSerializableExtra(NAME_CONFIG) as SmsConfig?
         smsConfig?.let {
             editRegex.addTextChangedListener(object : TextWatcher {
@@ -100,7 +201,12 @@ class RegexModifyActivity : BaseActivity() {
         }
         smsConfig?.let {
             it.regex = editRegex.text.toString()
-            SmsConfigDao.save(it)
+            if (it.id == -1) {
+                SmsConfigDao.insert(it)
+            } else {
+                SmsConfigDao.update(it)
+            }
+            toast("保存成功!")
         }
     }
 
@@ -120,7 +226,7 @@ class RegexModifyActivity : BaseActivity() {
                 stringConsole.append("NULL")
                 break
             }
-            stringConsole.append(result).append(" ")
+            stringConsole.append(result.replace(' ', '_')).append(" ")//使用 _ 代替结果中的空格
 
             //遍历字符串, 高亮显示结果
             var index = 0
@@ -143,7 +249,8 @@ class RegexModifyActivity : BaseActivity() {
 
     override fun onBackPressed() {
         //如果没做改变
-        if (smsConfig?.regex?.equals((editRegex.text.toString())) ?: false) {
+        if (smsConfig == null || smsConfig?.regex == null ||
+                smsConfig?.regex?.equals(editRegex.text.toString()) ?: false) {
             finish()
             return
         }
@@ -163,6 +270,11 @@ class RegexModifyActivity : BaseActivity() {
                     finish()
                 }).create()
         dialog.show()
+    }
+
+    override fun onNewIntent(intent: Intent) {
+        super.onNewIntent(intent)
+        init(intent)
     }
 
     override fun hasBackArrow(): Boolean = true

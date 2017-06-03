@@ -5,10 +5,13 @@ import android.annotation.TargetApi
 import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
+import android.os.SystemClock
+import android.preference.PreferenceCategory
 import android.preference.PreferenceManager
 import tech.summerly.smshelper.AppContext
 import tech.summerly.smshelper.R
 import tech.summerly.smshelper.activity.base.AppCompatPreferenceActivity
+import tech.summerly.smshelper.utils.extention.DelegateExt
 import tech.summerly.smshelper.utils.extention.log
 import tech.summerly.smshelper.utils.extention.toast
 
@@ -45,8 +48,29 @@ class MainActivity : AppCompatPreferenceActivity() {
             preference.summary = getString(R.string.summary_setting_default_keyword_template, newValue)
             true
         }
+
+
+        val preferenceSimulate = preferenceScreen.findPreference(getString(R.string.key_setting_simulate))
+        if (!PreferenceManager.getDefaultSharedPreferences(this).getBoolean("isPreferenceSimulateShow", false)) {
+            (preferenceScreen.findPreference(getString(R.string.key_setting_category_about)) as PreferenceCategory).removePreference(preferenceSimulate)
+        }
+
+        val preferenceAbout = preferenceScreen.findPreference(getString(R.string.key_setting_about))
+        preferenceAbout.setOnPreferenceClickListener {
+            System.arraycopy(mHints, 1, mHints, 0, mHints.size - 1)
+            mHints[mHints.size - 1] = SystemClock.uptimeMillis()
+            if (SystemClock.uptimeMillis() - mHints[0] <= 500) {
+                var isPreferenceSimulateShow by DelegateExt.preference("isPreferenceSimulateShow", false)
+                if (!isPreferenceSimulateShow) {
+                    isPreferenceSimulateShow = true
+                    (preferenceScreen.findPreference(getString(R.string.key_setting_category_about)) as PreferenceCategory).addPreference(preferenceSimulate)
+                }
+            }
+            true
+        }
     }
 
+    private var mHints = LongArray(3)//初始全部为0
 
     private fun requestToReceiveSms() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M

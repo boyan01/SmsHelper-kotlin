@@ -11,4 +11,4 @@ import java.io.Serializable
  *     version: 1.0
  * </pre>
  */
-data class SmsConfig(var id: Int = -1, val number: String, val content: String, var regex: String? = null) : Serializable
+data class SmsConfig(val id: Int = -1, val number: String, var content: String = "", var regex: String = "") : Serializable

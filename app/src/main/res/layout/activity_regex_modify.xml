@@ -33,6 +33,7 @@
                 android:lineSpacingExtra="4dp"
                 android:maxLines="11"
                 android:padding="8dp"
+                android:textIsSelectable="true"
                 android:textSize="16sp"
                 tools:text="学校把大零钱罐和一大篮红鼻子交到我面前时我基本是一脸懵逼的状态，一是因为我那时英语本就不太好，交代给我事我就听懂了“零钱罐的钱收集的钱是帮助孩子的”，而具体怎么帮如何筹款那些复杂的英文我一句也没听懂。二则是我带的筹款小队没有一个华裔，我只能靠着蹩脚的英语和张牙舞爪的手势跟他们沟通，效果非常不好。
 他们说了一大堆我听不懂的话，我也说了一大堆他们听不懂的话，这种情况一直持续到临上街时，我自暴自弃放弃语言交流，拿起篮子里的红鼻子戴上，并示意让他们也戴上，然后一手拿着零钱罐一手挎着红鼻子篮就这么走到街上，心里想着逛一圈就回去，反正学校也没定个目标。
@@ -51,13 +52,28 @@
     </ScrollView>
 
 
-    <EditText
-        android:id="@+id/editRegex"
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom"
-        android:hint="@string/hint_input_the_regex_to_match_code"
-        android:inputType="textNoSuggestions"
-        tools:text="(/name)" />
+        android:layout_height="match_parent">
+
+        <include
+            layout="@layout/window_pop_regex"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_above="@+id/editRegex"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true" />
+
+        <EditText
+            android:id="@+id/editRegex"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:hint="@string/hint_input_the_regex_to_match_code"
+            android:inputType="textNoSuggestions"
+            tools:text="(/name)" />
+
+    </RelativeLayout>
+
 
 </FrameLayout>

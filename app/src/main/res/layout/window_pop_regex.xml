@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TextView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/textAttention"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:background="@drawable/ic_mode_comment_black_24dp"
+    android:elevation="5dp"
+    android:paddingBottom="18dp"
+    android:paddingEnd="16dp"
+    android:paddingStart="16dp"
+    android:paddingTop="12dp"
+    android:textColor="@color/colorWhite"
+    android:visibility="gone"
+    tools:backgroundTint="@color/colorAccent"
+    tools:text="..............."
+    tools:visibility="visible" />
+

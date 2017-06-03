@@ -1,18 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
-
-    <TextView
-        android:id="@+id/textDelete"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:textSize="18sp"
-        android:visibility="gone"
-        tools:text="已删除的文字" />
-
+    android:layout_height="wrap_content"
+    android:orientation="horizontal">
 
     <LinearLayout
         android:id="@+id/ll_holder"
@@ -20,7 +11,7 @@
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:padding="8dp"
-        tools:visibility="visible">
+        tools:layout_width="300dp">
 
         <FrameLayout
             android:layout_width="match_parent"
@@ -55,5 +46,15 @@
             tools:text="【知乎】帐号安全验证码是 511425，1\n0 分钟内有效。" />
     </LinearLayout>
 
+    <TextView
+        android:id="@+id/textDelete"
+        android:layout_width="500dp"
+        android:layout_height="match_parent"
+        android:background="@color/colorAccent"
+        android:gravity="center|start"
+        android:padding="8dp"
+        android:text="@string/activity_sms_config_swipe_delete"
+        android:textColor="@color/colorWhite"
+        android:textSize="18sp" />
 
-</FrameLayout>
+</LinearLayout>

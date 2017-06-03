@@ -25,9 +25,8 @@
 
         <receiver
             android:name=".receiver.MessageReceiver"
-            android:permission="android.permission.RECEIVE_SMS"
-            tools:ignore="UnprotectedSMSBroadcastReceiver">
-            <intent-filter android:priority="1000">
+            android:permission="android.permission.BROADCAST_SMS">
+            <intent-filter android:priority="999">
                 <action android:name="android.provider.Telephony.SMS_RECEIVED" />
             </intent-filter>
         </receiver>
@@ -35,12 +34,22 @@
         <activity android:name=".activity.NotificationHandleActivity" />
         <activity
             android:name=".activity.RegexModifyActivity"
-            android:label="@string/title_activity_regex_modify" />
+            android:label="@string/title_activity_regex_modify"
+            android:launchMode="singleTask" />
         <activity
-            android:label="@string/title_activity_sms_config"
-            android:name=".activity.SmsConfigActivity">
+            android:name=".activity.SmsConfigActivity"
+            android:label="@string/title_activity_sms_config">
             <intent-filter>
                 <action android:name="tech.summerly.action.sms.config_all" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+
+        <activity
+            android:name=".activity.SendMessageActivity"
+            android:label="Simulate">
+            <intent-filter>
+                <action android:name="tech.summerly.action.simulate" />
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>

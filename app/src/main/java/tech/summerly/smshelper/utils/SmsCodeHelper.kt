@@ -3,6 +3,7 @@ package tech.summerly.smshelper.utils
 import tech.summerly.smshelper.R
 import tech.summerly.smshelper.data.dao.SmsConfigDao
 import tech.summerly.smshelper.data.entity.Message
+import tech.summerly.smshelper.data.entity.SmsConfig
 import tech.summerly.smshelper.utils.extention.DelegateExt
 import tech.summerly.smshelper.utils.extention.string
 import tech.summerly.smshelper.utils.extention.log

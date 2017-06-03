@@ -21,11 +21,12 @@ object DelegateExt {
 }
 
 class Preference<T>(private val context: Context, private val name: String, private val default: T) {
-
     companion object {
+
         val PREF_DEFAULT: String by lazy {
-            PreferenceManager.getDefaultSharedPreferencesName(AppContext.instance)
+            AppContext.instance.packageName + "_preferences"
         }
+
     }
 
     private val pref: SharedPreferences by lazy {
