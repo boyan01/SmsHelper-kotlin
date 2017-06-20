@@ -1,5 +1,7 @@
 package tech.summerly.smshelper.activity
 
+import android.content.ClipboardManager
+import android.content.Context
 import android.graphics.Canvas
 import android.os.Bundle
 import android.support.design.widget.Snackbar
@@ -10,19 +12,21 @@ import android.support.v7.widget.helper.ItemTouchHelper
 import android.view.*
 import kotlinx.android.synthetic.main.activity_sms_config.*
 import kotlinx.android.synthetic.main.item_sms_config.view.*
-import org.jetbrains.anko.AnkoLogger
-import org.jetbrains.anko.info
-import org.jetbrains.anko.startActivity
+import org.jetbrains.anko.*
 import tech.summerly.smshelper.R
 import tech.summerly.smshelper.activity.RegexModifyActivity.Companion.NAME_CONFIG
 import tech.summerly.smshelper.activity.base.BaseActivity
 import tech.summerly.smshelper.data.SmsConfig
 import tech.summerly.smshelper.data.datasource.SmsConfigDataSource
+import tech.summerly.smshelper.utils.extention.copyToClipboard
+import tech.summerly.smshelper.utils.extention.getObjectFromString
+import tech.summerly.smshelper.utils.extention.serialize
+import tech.summerly.smshelper.utils.extention.toast
 
 class SmsConfigActivity : BaseActivity(), AnkoLogger {
 
 
-    val smsConfigs: MutableList<SmsConfig> = mutableListOf()
+    val smsConfigs: ArrayList<SmsConfig> = ArrayList()
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -64,7 +68,7 @@ class SmsConfigActivity : BaseActivity(), AnkoLogger {
      */
     private fun refreshList() {
         smsConfigs.clear()
-        smsConfigs.addAll(SmsConfigDataSource.dataSource.getAll().toMutableList())
+        smsConfigs.addAll(SmsConfigDataSource.dataSource.getAll())
         listSmsConfig.adapter.notifyDataSetChanged()
     }
 
@@ -77,10 +81,47 @@ class SmsConfigActivity : BaseActivity(), AnkoLogger {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
-            R.id.menu_sms_config_list_import -> Unit
-            R.id.menu_sms_config_list_export -> Unit
+            R.id.menu_sms_config_list_import -> importConfigFromClipboard()
+            R.id.menu_sms_config_list_export -> exportConfigToClipboard()
         }
         return super.onOptionsItemSelected(item)
+    }
+
+    private fun exportConfigToClipboard() {
+
+        val serialization = smsConfigs.serialize()
+        copyToClipboard(serialization)
+        info { "复制了: $serialization" }
+        toast("已成功复制到剪切板.")
+    }
+
+    private fun importConfigFromClipboard() {
+        val clipText: String = getSystemService(Context.CLIPBOARD_SERVICE).run {
+            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.HONEYCOMB)
+                (this as ClipboardManager).primaryClip.getItemAt(0).coerceToText(this@SmsConfigActivity).toString()
+            else
+                @Suppress("DEPRECATION")
+                (this as android.text.ClipboardManager).text.toString()
+        }
+
+        info("clipText : $clipText")
+
+        val arrayList = clipText.getObjectFromString<ArrayList<SmsConfig>>()
+        if (arrayList == null) {
+            toast("导入失败.")
+            return
+        }
+        info("arrayList = $arrayList")
+        doAsync {
+            arrayList.forEach {
+                SmsConfigDataSource.dataSource.deleteByNumber(it.number)
+                SmsConfigDataSource.dataSource.insert(it.copy(id = -1))
+            }
+            uiThread {
+                toast("导入成功")
+                refreshList()
+            }
+        }
     }
 
     class SmsConfigListAdapter(val configs: List<SmsConfig>, val itemClick: ((SmsConfig) -> Unit)? = null) : RecyclerView.Adapter<SmsConfigListAdapter.Holder>() {
@@ -113,6 +154,9 @@ class SmsConfigActivity : BaseActivity(), AnkoLogger {
      */
     private inline fun <T> RecyclerView.setSwipeAble(noinline onSwiped: (Int) -> T, crossinline onRevoked: (Pair<Int, T?>) -> Unit) = ItemTouchHelper(object : ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT) {
 
+        /**
+         * 用 int 和 T 键值对临时保存所擦除的那一项的 位置 和  数据
+         */
         var removed: Pair<Int, T?> = 0 to null
 
         //不响应 move 事件

@@ -1,20 +1,16 @@
 package tech.summerly.smshelper.activity
 
 import android.app.NotificationManager
-import android.content.ClipData
-import android.content.ClipboardManager
-import android.content.Context
 import android.content.Intent
-import android.os.Build
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
-import tech.summerly.smshelper.R
 import tech.summerly.smshelper.activity.RegexModifyActivity.Companion.NAME_CONFIG
 import tech.summerly.smshelper.data.Message
 import tech.summerly.smshelper.data.datasource.SmsConfigDataSource
 import tech.summerly.smshelper.receiver.MessageReceiver
 import tech.summerly.smshelper.receiver.MessageReceiver.Companion.ID_NOTIFICATION_CODE
 import tech.summerly.smshelper.receiver.MessageReceiver.Companion.NAME_MESSAGE
+import tech.summerly.smshelper.utils.extention.copyToClipboard
 import tech.summerly.smshelper.utils.extention.toast
 
 class NotificationHandleActivity : AppCompatActivity() {
@@ -35,8 +31,9 @@ class NotificationHandleActivity : AppCompatActivity() {
         message?.let {
             when (intent.getStringExtra(MessageReceiver.NAME_ACTION)) {
 
-                ACTION_COPY -> {//复制验证码
-                    copyCodeToClipboard(it.code)
+                ACTION_COPY -> it.code.let {
+                    copyToClipboard(it)//复制验证码
+                    toast(getString(tech.summerly.smshelper.R.string.toast_format, it))//toast
                 }
 
                 ACTION_UPDATE_REGEX -> {//修改匹配规则
@@ -51,16 +48,5 @@ class NotificationHandleActivity : AppCompatActivity() {
         finish()
     }
 
-    @Suppress("DEPRECATION")
-    private fun copyCodeToClipboard(code: String) = with(getSystemService(Context.CLIPBOARD_SERVICE)) {
-        //toast
-        toast(getString(R.string.toast_format, code))
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
-            (this as ClipboardManager).primaryClip = ClipData.newPlainText("code", code)
-        } else {
-            (this as android.text.ClipboardManager).text = code
-        }
-    }
 
 }

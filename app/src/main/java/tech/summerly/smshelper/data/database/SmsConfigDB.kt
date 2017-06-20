@@ -1,5 +1,6 @@
 package tech.summerly.smshelper.data.database
 
+import android.content.ContentValues
 import tech.summerly.smshelper.R
 import tech.summerly.smshelper.data.SmsConfig
 import tech.summerly.smshelper.data.database.SmsConfigDbHelper.Companion.CONTENT
@@ -58,9 +59,14 @@ object SmsConfigDB : SmsConfigDataSource {
      * 如果 id 不为 -1,则 插入到原来的位置
      */
     override fun insert(smsConfig: SmsConfig) = with(smsConfig) {
-        val sql = "insert into ${SmsConfigDbHelper.NAME_TABLE} values(?,?,?,?) "
-        SmsConfigDbHelper.instance.writableDatabase.execSQL(sql, arrayOf(if (id == -1) null else id, number, content, regex))
-
+        SmsConfigDbHelper.instance.writableDatabase.use {
+            val values = ContentValues()
+            values.put(ID, if (id == -1) null else id)
+            values.put(NUMBER, number)
+            values.put(CONTENT, content)
+            values.put(REGEX, regex)
+            it.insert(NAME_TABLE, null, values)
+        }
     }
 
 

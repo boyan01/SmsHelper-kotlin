@@ -1,0 +1,79 @@
+package tech.summerly.smshelper.utils.extention
+
+import android.app.NotificationManager
+import android.app.PendingIntent
+import android.content.ClipboardManager
+import android.content.Context
+import android.content.Intent
+import android.os.Build
+import android.support.v7.app.NotificationCompat
+import tech.summerly.smshelper.R
+import tech.summerly.smshelper.activity.NotificationHandleActivity
+import tech.summerly.smshelper.data.Message
+import tech.summerly.smshelper.receiver.MessageReceiver
+
+/**
+ * <pre>
+ *     author : YangBin
+ *     e-mail : yangbinyhbn@gmail.com
+ *     time   : 2017/6/20
+ *     desc   :
+ * </pre>
+ */
+
+@Suppress("DEPRECATION")
+fun Context.copyToClipboard(code: String) = with(getSystemService(Context.CLIPBOARD_SERVICE)) {
+
+    if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.HONEYCOMB) {
+        (this as ClipboardManager).primaryClip = android.content.ClipData.newPlainText("code", code)
+    } else {
+        (this as android.text.ClipboardManager).text = code
+    }
+}
+
+/**
+ * 弹出验证码解析结果的 notification
+ */
+fun Context.showContentInfo(message: Message) {
+
+
+    //添加通知处理操作
+    val intent = Intent(this, NotificationHandleActivity::class.java)
+    intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
+    intent.putExtra(MessageReceiver.NAME_MESSAGE, message)
+
+    //action : 复制验证码
+    val copy = Intent(intent)
+    copy.putExtra(MessageReceiver.NAME_ACTION, NotificationHandleActivity.ACTION_COPY)
+    val copyIntent = PendingIntent.getActivity(this, 100,
+            copy, PendingIntent.FLAG_UPDATE_CURRENT)
+
+    //如果打开了自动复制选项
+    val isAutoCopy by DelegateExt.preference(getString(R.string.key_setting_auto_copy), false)
+    if (isAutoCopy) {
+        log("自动复制...")
+        startActivity(copy)
+        return
+    }
+
+    //action : 修改当前号码对应的正则表达式
+    val update = Intent(intent)
+    update.putExtra(MessageReceiver.NAME_ACTION, NotificationHandleActivity.ACTION_UPDATE_REGEX)
+    val updateIntent = PendingIntent.getActivity(this, 99,
+            update, PendingIntent.FLAG_UPDATE_CURRENT)
+
+    val builder = NotificationCompat.Builder(this)
+            .setSmallIcon(R.drawable.icon)
+            .setAutoCancel(true)
+            .setContentTitle(message.number)
+            .setContentIntent(copyIntent)
+            .setPriority(NotificationCompat.PRIORITY_MAX)
+            .addAction(R.drawable.ic_content_copy_24dp, getString(R.string.notification_action_copy), copyIntent)
+            .addAction(R.drawable.ic_edit_black_24dp, getString(R.string.notification_action_update_regex), updateIntent)
+            .setVisibility(NotificationCompat.VISIBILITY_SECRET)
+            .setContentText("验证码:" + if (message.code.isEmpty()) "解析失败" else message.code)
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {// heads-up notification
+        builder.setFullScreenIntent(copyIntent, true)
+    }
+    (getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager).notify(MessageReceiver.ID_NOTIFICATION_CODE, builder.build())
+}

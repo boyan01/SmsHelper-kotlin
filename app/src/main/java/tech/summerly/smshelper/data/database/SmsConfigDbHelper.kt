@@ -39,6 +39,6 @@ class SmsConfigDbHelper constructor(context: Context = AppContext.instance) : SQ
     }
 
     override fun onUpgrade(db: SQLiteDatabase?, oldVersion: Int, newVersion: Int) {
-        //todo
+
     }
 }

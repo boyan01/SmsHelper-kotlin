@@ -2,7 +2,6 @@ package tech.summerly.smshelper.data.datasource
 
 import tech.summerly.smshelper.data.SmsConfig
 import tech.summerly.smshelper.data.database.SmsConfigDB
-import tech.summerly.smshelper.data.database.SmsConfigDbHelper
 
 /**
  * <pre>
@@ -35,8 +34,10 @@ interface SmsConfigDataSource {
     /**
      * 将一条不存在的记录插入数据库中
      * 如果 id 不为 -1,则 插入到原来的位置
+     *
+     * @return the row ID of the newly inserted row, or -1 if an error occurred
      */
-    fun insert(smsConfig: SmsConfig)
+    fun insert(smsConfig: SmsConfig): Long
 
 
     /**
@@ -46,9 +47,11 @@ interface SmsConfigDataSource {
 
     /**
      * 通过号码删除记录
+     * @return the number of rows affected if a whereClause is passed in, 0
+     *         otherwise. To remove all rows and get a count pass "1" as the
+     *         whereClause.
      */
-    fun deleteByNumber(number: String) =
-            SmsConfigDbHelper.instance.writableDatabase.delete(SmsConfigDbHelper.NAME_TABLE, "${SmsConfigDbHelper.NUMBER} = ?", arrayOf(number))
+    fun deleteByNumber(number: String): Int
 
     /**
      * 通过号码获取一条记录
