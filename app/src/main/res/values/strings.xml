@@ -31,6 +31,8 @@
 
     <!-- menu -->
     <string name="menu_action_save">保存</string>
+    <string name="menu_action_export">导出到剪切板</string>
+    <string name="menu_action_import">从剪切板导入</string>
 
     <!-- regex modify activity -->
     <string name="regex_modify_activity_title_message">来自 : %s</string>

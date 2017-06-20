@@ -10,9 +10,8 @@ import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import tech.summerly.smshelper.R
 import tech.summerly.smshelper.activity.RegexModifyActivity.Companion.NAME_CONFIG
-import tech.summerly.smshelper.data.dao.SmsConfigDao
-import tech.summerly.smshelper.data.entity.Message
-import tech.summerly.smshelper.data.entity.SmsConfig
+import tech.summerly.smshelper.data.Message
+import tech.summerly.smshelper.data.datasource.SmsConfigDataSource
 import tech.summerly.smshelper.receiver.MessageReceiver
 import tech.summerly.smshelper.receiver.MessageReceiver.Companion.ID_NOTIFICATION_CODE
 import tech.summerly.smshelper.receiver.MessageReceiver.Companion.NAME_MESSAGE
@@ -42,7 +41,7 @@ class NotificationHandleActivity : AppCompatActivity() {
 
                 ACTION_UPDATE_REGEX -> {//修改匹配规则
                     val intent = Intent(this, RegexModifyActivity::class.java)
-                    val smsConfig = SmsConfigDao.getConfigByNumber(number = it.number)
+                    val smsConfig = SmsConfigDataSource.dataSource.getConfigByNumber(number = it.number)
                     smsConfig.content = it.content
                     intent.putExtra(NAME_CONFIG, smsConfig)
                     startActivity(intent)

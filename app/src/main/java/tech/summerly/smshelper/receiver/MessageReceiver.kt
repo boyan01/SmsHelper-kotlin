@@ -5,7 +5,7 @@ import android.content.Context
 import android.content.Intent
 import android.os.Build
 import android.telephony.SmsMessage
-import tech.summerly.smshelper.data.entity.Message
+import tech.summerly.smshelper.data.Message
 import tech.summerly.smshelper.utils.SmsCodeHelper
 import tech.summerly.smshelper.utils.extention.log
 import tech.summerly.smshelper.utils.extention.showContentInfo

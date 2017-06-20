@@ -55,6 +55,7 @@ class MainActivity : AppCompatPreferenceActivity() {
             (preferenceScreen.findPreference(getString(R.string.key_setting_category_about)) as PreferenceCategory).removePreference(preferenceSimulate)
         }
 
+        //连续点击三次关于选项可进入开发者选项
         val preferenceAbout = preferenceScreen.findPreference(getString(R.string.key_setting_about))
         preferenceAbout.setOnPreferenceClickListener {
             System.arraycopy(mHints, 1, mHints, 0, mHints.size - 1)
@@ -62,6 +63,7 @@ class MainActivity : AppCompatPreferenceActivity() {
             if (SystemClock.uptimeMillis() - mHints[0] <= 500) {
                 var isPreferenceSimulateShow by DelegateExt.preference("isPreferenceSimulateShow", false)
                 if (!isPreferenceSimulateShow) {
+                    @Suppress("UNUSED_VALUE")
                     isPreferenceSimulateShow = true
                     (preferenceScreen.findPreference(getString(R.string.key_setting_category_about)) as PreferenceCategory).addPreference(preferenceSimulate)
                 }
@@ -70,7 +72,7 @@ class MainActivity : AppCompatPreferenceActivity() {
         }
     }
 
-    private var mHints = LongArray(3)//初始全部为0
+    private var mHints = LongArray(3)//用于记录点击的事件
 
     private fun requestToReceiveSms() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M

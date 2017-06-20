@@ -1,4 +1,4 @@
-package tech.summerly.smshelper.data.source
+package tech.summerly.smshelper.data.database
 
 import android.content.Context
 import android.database.sqlite.SQLiteDatabase

@@ -1,8 +1,5 @@
 package tech.summerly.smshelper.activity
 
-import android.animation.Animator
-import android.animation.ObjectAnimator
-import android.animation.ValueAnimator
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
@@ -17,15 +14,13 @@ import android.text.style.ForegroundColorSpan
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
-import android.view.animation.Animation
 import android.view.animation.AnimationUtils
-import android.view.animation.TranslateAnimation
 import kotlinx.android.synthetic.main.activity_regex_modify.*
 import kotlinx.android.synthetic.main.window_pop_regex.*
 import tech.summerly.smshelper.R
 import tech.summerly.smshelper.activity.base.BaseActivity
-import tech.summerly.smshelper.data.dao.SmsConfigDao
-import tech.summerly.smshelper.data.entity.SmsConfig
+import tech.summerly.smshelper.data.SmsConfig
+import tech.summerly.smshelper.data.datasource.SmsConfigDataSource
 import tech.summerly.smshelper.utils.extention.clear
 import tech.summerly.smshelper.utils.extention.color
 import tech.summerly.smshelper.utils.extention.log
@@ -202,9 +197,9 @@ class RegexModifyActivity : BaseActivity() {
         smsConfig?.let {
             it.regex = editRegex.text.toString()
             if (it.id == -1) {
-                SmsConfigDao.insert(it)
+                SmsConfigDataSource.dataSource.insert(it)
             } else {
-                SmsConfigDao.update(it)
+                SmsConfigDataSource.dataSource.update(it)
             }
             toast("保存成功!")
         }

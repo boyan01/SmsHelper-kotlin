@@ -1,6 +1,5 @@
 package tech.summerly.smshelper.activity
 
-import android.content.Intent
 import android.graphics.Canvas
 import android.os.Bundle
 import android.support.design.widget.Snackbar
@@ -8,19 +7,19 @@ import android.support.v7.widget.DividerItemDecoration
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.support.v7.widget.helper.ItemTouchHelper
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import kotlinx.android.synthetic.main.activity_sms_config.*
 import kotlinx.android.synthetic.main.item_sms_config.view.*
+import org.jetbrains.anko.AnkoLogger
+import org.jetbrains.anko.info
+import org.jetbrains.anko.startActivity
 import tech.summerly.smshelper.R
 import tech.summerly.smshelper.activity.RegexModifyActivity.Companion.NAME_CONFIG
 import tech.summerly.smshelper.activity.base.BaseActivity
-import tech.summerly.smshelper.data.dao.SmsConfigDao
-import tech.summerly.smshelper.data.entity.SmsConfig
-import tech.summerly.smshelper.utils.extention.log
+import tech.summerly.smshelper.data.SmsConfig
+import tech.summerly.smshelper.data.datasource.SmsConfigDataSource
 
-class SmsConfigActivity : BaseActivity() {
+class SmsConfigActivity : BaseActivity(), AnkoLogger {
 
 
     val smsConfigs: MutableList<SmsConfig> = mutableListOf()
@@ -36,55 +35,26 @@ class SmsConfigActivity : BaseActivity() {
         listSmsConfig.layoutManager = LinearLayoutManager(this)
         listSmsConfig.addItemDecoration(DividerItemDecoration(this, LinearLayoutManager.VERTICAL))
         listSmsConfig.adapter = SmsConfigListAdapter(smsConfigs, {
-            log(it.toString())
-            val intent = Intent(this, RegexModifyActivity::class.java)
-            intent.putExtra(NAME_CONFIG, it)
-            startActivity(intent)
+            info(it.toString())
+            startActivity<RegexModifyActivity>(NAME_CONFIG to it)
         })
 
-        //增加滑动删除
-        val itemTouchHelper = ItemTouchHelper(object : ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT) {
-
-            var removed: Pair<Int, SmsConfig?> = 0 to null
-            //不响应 move 事件
-            override fun onMove(recyclerView: RecyclerView?, viewHolder: RecyclerView.ViewHolder?, target: RecyclerView.ViewHolder?) = false
-
-            override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
-
-                removed = viewHolder.adapterPosition to smsConfigs.removeAt(viewHolder.adapterPosition)//记录下最近移除的条目
-                removed.second?.let {
-                    SmsConfigDao.deleteByNumber(it.number)
-                }
-                log("移除了 $removed")
-                listSmsConfig.adapter.notifyItemRemoved(viewHolder.adapterPosition)
-                Snackbar.make(listSmsConfig, "刚刚进行了删除操作,是否撤销?", Snackbar.LENGTH_LONG).setAction("撤销", {
-                    log("撤销 $removed 的删除")
-                    removed.second?.let {
-                        SmsConfigDao.insert(it)
-                        smsConfigs.add(removed.first, it)
-                        listSmsConfig.adapter.notifyItemInserted(removed.first)
-                    }
-                }).show()
+        listSmsConfig.setSwipeAble({
+            val smsConfig = smsConfigs.removeAt(it)
+            SmsConfigDataSource.dataSource.deleteByNumber(smsConfig.number)
+            smsConfig
+        }) { (position, smsConfig) ->
+            smsConfig?.let {
+                smsConfigs.add(position, smsConfig)
+                SmsConfigDataSource.dataSource.insert(smsConfig)
             }
-
-            override fun onChildDraw(c: Canvas?, recyclerView: RecyclerView, viewHolder: RecyclerView.ViewHolder, dX: Float, dY: Float, actionState: Int, isCurrentlyActive: Boolean) {
-                viewHolder.itemView.scrollTo(-dX.toInt(), 0)
-            }
-
-            override fun clearView(recyclerView: RecyclerView?, viewHolder: RecyclerView.ViewHolder) {
-                super.clearView(recyclerView, viewHolder)
-                //移除view的时候,view回滚到原来的状态,防止view的复用导致撤销删除错位的bug
-                viewHolder.itemView.scrollTo(0, 0)
-            }
-
-        })
-        itemTouchHelper.attachToRecyclerView(listSmsConfig)
+        }
 
     }
 
     override fun onStart() {
         super.onStart()
-        log("onStart : 刷新列表")
+        info("onStart : 刷新列表")
         refreshList()
     }
 
@@ -94,11 +64,24 @@ class SmsConfigActivity : BaseActivity() {
      */
     private fun refreshList() {
         smsConfigs.clear()
-        smsConfigs.addAll(SmsConfigDao.getAll().toMutableList())
+        smsConfigs.addAll(SmsConfigDataSource.dataSource.getAll().toMutableList())
         listSmsConfig.adapter.notifyDataSetChanged()
     }
 
     override fun hasBackArrow() = true
+
+    override fun onCreateOptionsMenu(menu: Menu): Boolean {
+        menuInflater.inflate(R.menu.menu_sms_config_list, menu)
+        return super.onCreateOptionsMenu(menu)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            R.id.menu_sms_config_list_import -> Unit
+            R.id.menu_sms_config_list_export -> Unit
+        }
+        return super.onOptionsItemSelected(item)
+    }
 
     class SmsConfigListAdapter(val configs: List<SmsConfig>, val itemClick: ((SmsConfig) -> Unit)? = null) : RecyclerView.Adapter<SmsConfigListAdapter.Holder>() {
         override fun onBindViewHolder(holder: Holder, position: Int) {
@@ -121,6 +104,41 @@ class SmsConfigActivity : BaseActivity() {
 
         class Holder(itemView: View?) : RecyclerView.ViewHolder(itemView)
     }
+
+
+    /**
+     * 让 RecyclerView 可以左滑删除
+     * @param onSwiped 响应左滑删除时的调用
+     * @param onRevoked 响应撤回删除时的调用
+     */
+    private inline fun <T> RecyclerView.setSwipeAble(noinline onSwiped: (Int) -> T, crossinline onRevoked: (Pair<Int, T?>) -> Unit) = ItemTouchHelper(object : ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT) {
+
+        var removed: Pair<Int, T?> = 0 to null
+
+        //不响应 move 事件
+        override fun onMove(recyclerView: RecyclerView?, viewHolder: RecyclerView.ViewHolder?, target: RecyclerView.ViewHolder?) = false
+
+        override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
+
+            removed = viewHolder.adapterPosition to onSwiped(viewHolder.adapterPosition)//记录下最近移除的条目
+            this@setSwipeAble.adapter.notifyItemRemoved(viewHolder.adapterPosition)
+            Snackbar.make(this@setSwipeAble, "刚刚进行了删除操作,是否撤销?", Snackbar.LENGTH_LONG).setAction("撤销", {
+                onRevoked(removed)
+                this@setSwipeAble.adapter.notifyItemInserted(removed.first)
+            }).show()
+        }
+
+        override fun onChildDraw(c: Canvas?, recyclerView: RecyclerView, viewHolder: RecyclerView.ViewHolder, dX: Float, dY: Float, actionState: Int, isCurrentlyActive: Boolean) {
+            viewHolder.itemView.scrollTo(-dX.toInt(), 0)
+        }
+
+        override fun clearView(recyclerView: RecyclerView?, viewHolder: RecyclerView.ViewHolder) {
+            super.clearView(recyclerView, viewHolder)
+            //移除view的时候,view回滚到原来的状态,防止view的复用导致撤销删除错位的bug
+            viewHolder.itemView.scrollTo(0, 0)
+        }
+
+    }).attachToRecyclerView(this@setSwipeAble)
 
 }
 

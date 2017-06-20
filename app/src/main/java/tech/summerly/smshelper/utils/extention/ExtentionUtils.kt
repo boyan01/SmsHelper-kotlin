@@ -5,14 +5,15 @@ import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
 import android.os.Build
-import android.support.annotation.IdRes
+import android.support.annotation.ColorRes
+import android.support.annotation.StringRes
 import android.support.v7.app.NotificationCompat
 import android.util.Log
 import android.widget.Toast
 import tech.summerly.smshelper.AppContext
 import tech.summerly.smshelper.R
 import tech.summerly.smshelper.activity.NotificationHandleActivity
-import tech.summerly.smshelper.data.entity.Message
+import tech.summerly.smshelper.data.Message
 import tech.summerly.smshelper.receiver.MessageReceiver
 
 /**
@@ -82,7 +83,7 @@ fun Context.showContentInfo(message: Message) {
 }
 
 @Suppress("DEPRECATION")
-fun color(@IdRes id: Int, context: Context = AppContext.instance): Int {
+fun color(@ColorRes id: Int, context: Context = AppContext.instance): Int {
     if (Build.VERSION.SDK_INT >= 23) {
         return context.getColor(id)
     } else {
@@ -90,9 +91,9 @@ fun color(@IdRes id: Int, context: Context = AppContext.instance): Int {
     }
 }
 
-fun string(@IdRes stringId: Int) = AppContext.instance.getString(stringId)!!
+fun string(@StringRes stringId: Int) = AppContext.instance.getString(stringId)!!
 
-fun string(@IdRes stringId: Int, vararg formatArgs: Any) = AppContext.instance.getString(stringId, formatArgs)!!
+fun string(@StringRes stringId: Int, vararg formatArgs: Any) = AppContext.instance.getString(stringId, formatArgs)!!
 
 
 fun StringBuilder.clear() {
