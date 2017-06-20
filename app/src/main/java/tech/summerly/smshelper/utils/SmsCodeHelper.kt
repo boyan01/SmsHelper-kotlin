@@ -1,9 +1,8 @@
 package tech.summerly.smshelper.utils
 
 import tech.summerly.smshelper.R
-import tech.summerly.smshelper.data.dao.SmsConfigDao
-import tech.summerly.smshelper.data.entity.Message
-import tech.summerly.smshelper.data.entity.SmsConfig
+import tech.summerly.smshelper.data.Message
+import tech.summerly.smshelper.data.datasource.SmsConfigDataSource
 import tech.summerly.smshelper.utils.extention.DelegateExt
 import tech.summerly.smshelper.utils.extention.string
 import tech.summerly.smshelper.utils.extention.log
@@ -30,7 +29,7 @@ object SmsCodeHelper {
             return
         }
         //向数据库请求该手机号码对应的正则表达式
-        val regex: String = SmsConfigDao.getRegexByNumber(message.number)
+        val regex: String = SmsConfigDataSource.dataSource.getRegexByNumber(message.number)
 
         try {
             val pattern = Pattern.compile(regex)
