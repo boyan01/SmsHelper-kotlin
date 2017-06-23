@@ -18,10 +18,10 @@ import tech.summerly.smshelper.activity.RegexModifyActivity.Companion.NAME_CONFI
 import tech.summerly.smshelper.activity.base.BaseActivity
 import tech.summerly.smshelper.data.SmsConfig
 import tech.summerly.smshelper.data.datasource.SmsConfigDataSource
-import tech.summerly.smshelper.utils.extention.copyToClipboard
-import tech.summerly.smshelper.utils.extention.getObjectFromString
-import tech.summerly.smshelper.utils.extention.serialize
-import tech.summerly.smshelper.utils.extention.toast
+import tech.summerly.smshelper.extention.copyToClipboard
+import tech.summerly.smshelper.extention.getObjectFromString
+import tech.summerly.smshelper.extention.serialize
+import tech.summerly.smshelper.extention.toast
 
 class SmsConfigActivity : BaseActivity(), AnkoLogger {
 
@@ -178,7 +178,7 @@ class SmsConfigActivity : BaseActivity(), AnkoLogger {
 
         override fun clearView(recyclerView: RecyclerView?, viewHolder: RecyclerView.ViewHolder) {
             super.clearView(recyclerView, viewHolder)
-            //移除view的时候,view回滚到原来的状态,防止view的复用导致撤销删除错位的bug
+            //防止view的复用导致撤销删除错位的bug,移除view的时候,view回滚到原来的状态,
             viewHolder.itemView.scrollTo(0, 0)
         }
 

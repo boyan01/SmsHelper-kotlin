@@ -22,10 +22,10 @@ import tech.summerly.smshelper.R
 import tech.summerly.smshelper.activity.base.BaseActivity
 import tech.summerly.smshelper.data.SmsConfig
 import tech.summerly.smshelper.data.datasource.SmsConfigDataSource
-import tech.summerly.smshelper.utils.extention.clear
-import tech.summerly.smshelper.utils.extention.color
-import tech.summerly.smshelper.utils.extention.log
-import tech.summerly.smshelper.utils.extention.toast
+import tech.summerly.smshelper.extention.clear
+import tech.summerly.smshelper.extention.color
+import tech.summerly.smshelper.extention.log
+import tech.summerly.smshelper.extention.toast
 
 /**
  * 此 activity 启动模式为 single task

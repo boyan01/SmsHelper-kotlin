@@ -1,13 +1,12 @@
 package tech.summerly.smshelper.activity.base
 
 import android.os.Bundle
-import android.os.PersistableBundle
 import android.support.v4.graphics.drawable.DrawableCompat
 import android.support.v7.app.AppCompatActivity
 import android.view.MenuItem
 import tech.summerly.smshelper.AppContext
 import tech.summerly.smshelper.R
-import tech.summerly.smshelper.utils.extention.color
+import tech.summerly.smshelper.extention.color
 
 /**
  * <pre>

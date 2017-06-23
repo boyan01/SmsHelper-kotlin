@@ -1,19 +1,21 @@
 package tech.summerly.smshelper.activity
 
+import android.app.Activity
 import android.app.NotificationManager
 import android.content.Intent
 import android.os.Bundle
-import android.support.v7.app.AppCompatActivity
+import tech.summerly.smshelper.R
 import tech.summerly.smshelper.activity.RegexModifyActivity.Companion.NAME_CONFIG
 import tech.summerly.smshelper.data.Message
 import tech.summerly.smshelper.data.datasource.SmsConfigDataSource
+import tech.summerly.smshelper.extention.copyToClipboard
+import tech.summerly.smshelper.extention.string
+import tech.summerly.smshelper.extention.toast
 import tech.summerly.smshelper.receiver.MessageReceiver
 import tech.summerly.smshelper.receiver.MessageReceiver.Companion.ID_NOTIFICATION_CODE
 import tech.summerly.smshelper.receiver.MessageReceiver.Companion.NAME_MESSAGE
-import tech.summerly.smshelper.utils.extention.copyToClipboard
-import tech.summerly.smshelper.utils.extention.toast
 
-class NotificationHandleActivity : AppCompatActivity() {
+class NotificationHandleActivity : Activity() {
 
     companion object {
         val ACTION_COPY = "tech.summerly.action.copy"
@@ -33,7 +35,7 @@ class NotificationHandleActivity : AppCompatActivity() {
 
                 ACTION_COPY -> it.code.let {
                     copyToClipboard(it)//复制验证码
-                    toast(getString(tech.summerly.smshelper.R.string.toast_format, it))//toast
+                    toast(string(R.string.toast_format, it))//toast
                 }
 
                 ACTION_UPDATE_REGEX -> {//修改匹配规则

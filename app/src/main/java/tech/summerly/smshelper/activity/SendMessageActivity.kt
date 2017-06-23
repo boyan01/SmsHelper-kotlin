@@ -5,9 +5,8 @@ import kotlinx.android.synthetic.main.activity_send_message.*
 import tech.summerly.smshelper.R
 import tech.summerly.smshelper.activity.base.BaseActivity
 import tech.summerly.smshelper.data.Message
-import tech.summerly.smshelper.utils.SmsCodeHelper
-import tech.summerly.smshelper.utils.extention.showContentInfo
-import tech.summerly.smshelper.utils.extention.toast
+import tech.summerly.smshelper.extention.showContentInfo
+import tech.summerly.smshelper.extention.toast
 
 /**
  * <pre>
@@ -38,7 +37,7 @@ class SendMessageActivity : BaseActivity() {
             }
 
             val message = Message(textNumber.text.toString(), textContent.text.toString())
-            SmsCodeHelper.parse(message)
+//            parse(message)
             if (message.code.isEmpty()) {
                 toast("没解析出来")
             } else {

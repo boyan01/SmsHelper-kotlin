@@ -19,6 +19,7 @@
             android:label="@string/app_name">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
@@ -31,7 +32,10 @@
             </intent-filter>
         </receiver>
 
-        <activity android:name=".activity.NotificationHandleActivity" />
+        <activity
+            android:name=".activity.NotificationHandleActivity"
+            android:launchMode="standard"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
         <activity
             android:name=".activity.RegexModifyActivity"
             android:label="@string/title_activity_regex_modify"
@@ -44,15 +48,20 @@
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
-
         <activity
             android:name=".activity.SendMessageActivity"
             android:label="Simulate">
             <intent-filter>
                 <action android:name="tech.summerly.action.simulate" />
+
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".activity.SmsNotifyActivity"
+            android:launchMode="singleTask"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
+
     </application>
 
 </manifest>

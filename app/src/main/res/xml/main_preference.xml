@@ -12,7 +12,14 @@
         <SwitchPreference
             android:defaultValue="false"
             android:key="@string/key_setting_auto_copy"
+            android:summary="@string/summary_setting_auto_copy"
             android:title="@string/title_setting_auto_copy" />
+
+        <SwitchPreference
+            android:defaultValue="true"
+            android:key="@string/key_setting_display_sms_dialog"
+            android:summary="@string/summary_setting_display_sms_dialog"
+            android:title="@string/title_setting_display_sms_dialog" />
 
         <EditTextPreference
             android:defaultValue="@string/default_regex"
@@ -26,11 +33,12 @@
             android:summary="@string/summary_setting_default_keyword_template"
             android:title="@string/title_setting_default_keyword" />
 
+
     </PreferenceCategory>
 
     <PreferenceCategory
-        android:title="about"
-        android:key="@string/key_setting_category_about">
+        android:key="@string/key_setting_category_about"
+        android:title="about">
         <Preference
             android:key="@string/key_setting_about"
             android:summary="如果没有正常工作,请检查是否被其他管理软件禁止运行,或者是否授予短信接收权限.\nMIUI国际版用户请授予通知类短信的权限"
@@ -44,13 +52,13 @@
 
         <Preference
             android:summary="@string/personal_github_address"
-            android:title="开源地址如下:欢迎 star 和 fork 提交">
+            android:title="开源地址">
             <intent
                 android:action="android.intent.action.VIEW"
                 android:data="@string/personal_github_address" />
         </Preference>
         <Preference
-            android:summary="邮箱:yangbinyhbn@gmail.com\n酷安ID:林三"
+            android:summary="邮箱:yangbinyhbn@gmail.com"
             android:title="联系方式" />
     </PreferenceCategory>
 

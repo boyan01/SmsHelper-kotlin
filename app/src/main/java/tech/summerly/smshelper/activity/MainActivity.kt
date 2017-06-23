@@ -11,9 +11,9 @@ import android.preference.PreferenceManager
 import tech.summerly.smshelper.AppContext
 import tech.summerly.smshelper.R
 import tech.summerly.smshelper.activity.base.AppCompatPreferenceActivity
-import tech.summerly.smshelper.utils.extention.DelegateExt
-import tech.summerly.smshelper.utils.extention.log
-import tech.summerly.smshelper.utils.extention.toast
+import tech.summerly.smshelper.extention.DelegateExt
+import tech.summerly.smshelper.extention.log
+import tech.summerly.smshelper.extention.toast
 
 @Suppress("DEPRECATION")
 class MainActivity : AppCompatPreferenceActivity() {

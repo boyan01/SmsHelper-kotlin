@@ -2,7 +2,6 @@ package tech.summerly.smshelper
 
 import android.app.Activity
 import android.app.Application
-import tech.summerly.smshelper.utils.extention.DelegateExt
 import kotlin.properties.Delegates
 
 /**

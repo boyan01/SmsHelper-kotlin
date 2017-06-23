@@ -1,4 +1,4 @@
-package tech.summerly.smshelper.utils.extention
+package tech.summerly.smshelper.extention
 
 import android.content.Context
 import android.os.Build

@@ -9,8 +9,8 @@ import tech.summerly.smshelper.data.database.SmsConfigDbHelper.Companion.NAME_TA
 import tech.summerly.smshelper.data.database.SmsConfigDbHelper.Companion.NUMBER
 import tech.summerly.smshelper.data.database.SmsConfigDbHelper.Companion.REGEX
 import tech.summerly.smshelper.data.datasource.SmsConfigDataSource
-import tech.summerly.smshelper.utils.extention.DelegateExt
-import tech.summerly.smshelper.utils.extention.string
+import tech.summerly.smshelper.extention.DelegateExt
+import tech.summerly.smshelper.extention.string
 
 /**
  * <pre>

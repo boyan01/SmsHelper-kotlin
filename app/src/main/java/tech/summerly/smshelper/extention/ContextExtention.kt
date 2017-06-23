@@ -1,4 +1,4 @@
-package tech.summerly.smshelper.utils.extention
+package tech.summerly.smshelper.extention
 
 import android.app.NotificationManager
 import android.app.PendingIntent
@@ -9,8 +9,12 @@ import android.os.Build
 import android.support.v7.app.NotificationCompat
 import tech.summerly.smshelper.R
 import tech.summerly.smshelper.activity.NotificationHandleActivity
+import tech.summerly.smshelper.activity.NotificationHandleActivity.Companion.ACTION_COPY
+import tech.summerly.smshelper.activity.NotificationHandleActivity.Companion.ACTION_UPDATE_REGEX
 import tech.summerly.smshelper.data.Message
-import tech.summerly.smshelper.receiver.MessageReceiver
+import tech.summerly.smshelper.receiver.MessageReceiver.Companion.ID_NOTIFICATION_CODE
+import tech.summerly.smshelper.receiver.MessageReceiver.Companion.NAME_ACTION
+import tech.summerly.smshelper.receiver.MessageReceiver.Companion.NAME_MESSAGE
 
 /**
  * <pre>
@@ -24,7 +28,7 @@ import tech.summerly.smshelper.receiver.MessageReceiver
 @Suppress("DEPRECATION")
 fun Context.copyToClipboard(code: String) = with(getSystemService(Context.CLIPBOARD_SERVICE)) {
 
-    if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.HONEYCOMB) {
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
         (this as ClipboardManager).primaryClip = android.content.ClipData.newPlainText("code", code)
     } else {
         (this as android.text.ClipboardManager).text = code
@@ -40,25 +44,17 @@ fun Context.showContentInfo(message: Message) {
     //添加通知处理操作
     val intent = Intent(this, NotificationHandleActivity::class.java)
     intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
-    intent.putExtra(MessageReceiver.NAME_MESSAGE, message)
+    intent.putExtra(NAME_MESSAGE, message)
 
     //action : 复制验证码
     val copy = Intent(intent)
-    copy.putExtra(MessageReceiver.NAME_ACTION, NotificationHandleActivity.ACTION_COPY)
+    copy.putExtra(NAME_ACTION, ACTION_COPY)
     val copyIntent = PendingIntent.getActivity(this, 100,
             copy, PendingIntent.FLAG_UPDATE_CURRENT)
 
-    //如果打开了自动复制选项
-    val isAutoCopy by DelegateExt.preference(getString(R.string.key_setting_auto_copy), false)
-    if (isAutoCopy) {
-        log("自动复制...")
-        startActivity(copy)
-        return
-    }
-
     //action : 修改当前号码对应的正则表达式
     val update = Intent(intent)
-    update.putExtra(MessageReceiver.NAME_ACTION, NotificationHandleActivity.ACTION_UPDATE_REGEX)
+    update.putExtra(NAME_ACTION, ACTION_UPDATE_REGEX)
     val updateIntent = PendingIntent.getActivity(this, 99,
             update, PendingIntent.FLAG_UPDATE_CURRENT)
 
@@ -75,5 +71,5 @@ fun Context.showContentInfo(message: Message) {
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {// heads-up notification
         builder.setFullScreenIntent(copyIntent, true)
     }
-    (getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager).notify(MessageReceiver.ID_NOTIFICATION_CODE, builder.build())
+    (getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager).notify(ID_NOTIFICATION_CODE, builder.build())
 }
