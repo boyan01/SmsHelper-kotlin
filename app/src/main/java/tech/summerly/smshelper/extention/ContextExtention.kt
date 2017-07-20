@@ -25,14 +25,8 @@ import tech.summerly.smshelper.receiver.MessageReceiver.Companion.NAME_MESSAGE
  * </pre>
  */
 
-@Suppress("DEPRECATION")
 fun Context.copyToClipboard(code: String) = with(getSystemService(Context.CLIPBOARD_SERVICE)) {
-
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
-        (this as ClipboardManager).primaryClip = android.content.ClipData.newPlainText("code", code)
-    } else {
-        (this as android.text.ClipboardManager).text = code
-    }
+    (this as ClipboardManager).primaryClip = android.content.ClipData.newPlainText("code", code)
 }
 
 /**

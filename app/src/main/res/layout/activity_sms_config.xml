@@ -1,10 +1,50 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.v7.widget.RecyclerView xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/listSmsConfig"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context="tech.summerly.smshelper.activity.SmsConfigActivity"
-    tools:listitem="@layout/item_sms_config">
+    android:layout_height="match_parent">
 
-</android.support.v7.widget.RecyclerView>
+    <android.support.constraint.ConstraintLayout
+        android:id="@+id/emptyListLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone"
+        tools:visibility="visible">
+
+        <ImageView
+            android:id="@+id/emptyImage"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_marginBottom="8dp"
+            android:contentDescription="@string/description_content_empty_list"
+            android:src="@drawable/ic_hourglass_empty_black_24dp"
+            android:tint="@color/colorPrimary"
+            app:layout_constraintBottom_toTopOf="@+id/emptyText"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <TextView
+            android:id="@+id/emptyText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="list is empty"
+            tools:textStyle="bold"
+            tools:typeface="serif" />
+    </android.support.constraint.ConstraintLayout>
+
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/listSmsConfig"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context="tech.summerly.smshelper.activity.SmsConfigActivity"
+        tools:listitem="@layout/item_sms_config">
+
+    </android.support.v7.widget.RecyclerView>
+</FrameLayout>
+

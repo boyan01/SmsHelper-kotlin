@@ -1,6 +1,7 @@
 package tech.summerly.smshelper.extention
 
 import android.util.Base64
+import org.jetbrains.anko.attempt
 import java.io.*
 
 /**
@@ -35,13 +36,15 @@ fun Serializable.serialize(): String {
     return ""
 }
 
-@Suppress("UNCHECKED_CAST")
-fun <T : Serializable> String.getObjectFromString(): T? {
+inline fun <reified T : Serializable> String.getObjectFromString(): T? {
     var ois: ObjectInputStream? = null
     try {
         val bytes = Base64.decode(this, Base64.DEFAULT)
         ois = ObjectInputStream(ByteArrayInputStream(bytes))
-        return ois.readObject() as T
+        val obj = ois.readObject()
+        if (obj is T) {
+            return obj
+        }
     } catch (e: Exception) {
         return null
     } finally {
@@ -51,4 +54,5 @@ fun <T : Serializable> String.getObjectFromString(): T? {
 
         }
     }
+    return null
 }

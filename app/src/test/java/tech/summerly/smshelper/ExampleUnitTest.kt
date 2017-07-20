@@ -1,5 +1,6 @@
 package tech.summerly.smshelper
 
+import android.text.TextUtils
 import org.junit.Assert.assertEquals
 import org.junit.Test
 
@@ -29,4 +30,18 @@ class ExampleUnitTest {
         })
         println(result)
     }
+
+    @Test
+    fun formatTest() {
+        println(string(1))
+
+        println(string(1, "world"))
+    }
+
+    val stringMap = mapOf(1 to "hello%s", 2 to "nihao %s")
+
+    private fun string(id: Int): String = stringMap[id]!!
+
+    private fun string(id: Int, vararg formatArgs: Any): String = string(id).format(*formatArgs)
+
 }

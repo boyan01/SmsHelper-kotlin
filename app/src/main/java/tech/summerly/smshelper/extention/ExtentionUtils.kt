@@ -3,10 +3,10 @@ package tech.summerly.smshelper.extention
 import android.content.Context
 import android.os.Build
 import android.support.annotation.ColorRes
-import android.support.annotation.StringRes
 import android.util.Log
 import android.widget.Toast
 import tech.summerly.smshelper.AppContext
+import tech.summerly.smshelper.BuildConfig
 
 /**
  * <pre>
@@ -18,7 +18,7 @@ import tech.summerly.smshelper.AppContext
  * </pre>
  */
 fun Any.log(message: String?, tag: String = this.javaClass.name.replace("tech.summerly.smshelper", "")) {
-    if (false) {// close log output
+    if (BuildConfig.DEBUG) {// close log output
         Log.i(if (tag.isEmpty()) "empty" else tag, message)
     }
 }
@@ -36,10 +36,9 @@ fun color(@ColorRes id: Int, context: Context = AppContext.instance): Int {
     }
 }
 
-fun string(@StringRes stringId: Int) = AppContext.instance.getString(stringId)!!
+fun string(stringId: Int) = AppContext.instance.getString(stringId)!!
 
-fun string(@StringRes stringId: Int, vararg formatArgs: Any) = AppContext.instance.getString(stringId, formatArgs)!!
-
+fun string(stringId: Int, vararg formatArgs: Any) = string(stringId).format(*formatArgs)
 
 fun StringBuilder.clear() {
     if (isEmpty()) {

@@ -33,9 +33,9 @@ class NotificationHandleActivity : Activity() {
         message?.let {
             when (intent.getStringExtra(MessageReceiver.NAME_ACTION)) {
 
-                ACTION_COPY -> it.code.let {
-                    copyToClipboard(it)//复制验证码
-                    toast(string(R.string.toast_format, it))//toast
+                ACTION_COPY -> it.code.let { code: String ->
+                    copyToClipboard(code)//复制验证码
+                    toast(string(R.string.toast_format, code))//toast
                 }
 
                 ACTION_UPDATE_REGEX -> {//修改匹配规则
