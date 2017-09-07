@@ -7,7 +7,7 @@
 
 
 # 例子 ( example )
-## 简单情况(Simple):
+## 正常匹配(Simple):
 ![simple](/images/simple.gif)
 ## 复杂情况(Complex):
 ![complex](/images/complex.gif)
