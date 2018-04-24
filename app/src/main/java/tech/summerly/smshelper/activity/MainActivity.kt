@@ -25,6 +25,11 @@ class MainActivity : AppCompatPreferenceActivity() {
         setUpPreference()
     }
 
+    //消除
+    //https://securityintelligence.com/new-vulnerability-android-framework-fragment-injection/
+    override fun isValidFragment(fragmentName: String?): Boolean {
+        return false
+    }
 
     private fun setUpPreference() {
         //配置 keyword
@@ -83,7 +88,6 @@ class MainActivity : AppCompatPreferenceActivity() {
 
     @TargetApi(Build.VERSION_CODES.M)
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         if (checkSelfPermission(Manifest.permission.RECEIVE_SMS) == PackageManager.PERMISSION_DENIED) {
             toast(getString(R.string.toast_need_sms_permission_to_receive_sms))
             requestToReceiveSms()

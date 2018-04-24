@@ -33,7 +33,8 @@ import tech.summerly.smshelper.extention.toast
 class RegexModifyActivity : BaseActivity(), AnkoLogger {
 
     companion object {
-        val NAME_CONFIG = "smsConfig"
+        const val NAME_CONFIG = "smsConfig"
+        private const val REGEX_TEMPLATE = "%s.*?%s"
     }
 
     var smsConfig: SmsConfig? = null
@@ -45,7 +46,7 @@ class RegexModifyActivity : BaseActivity(), AnkoLogger {
         setContentView(R.layout.activity_regex_modify)
         init(intent)
 
-        val drawable = ContextCompat.getDrawable(this, R.drawable.ic_mode_comment_black_24dp)
+        val drawable = ContextCompat.getDrawable(this, R.drawable.ic_mode_comment_black_24dp)!!
         DrawableCompat.setTint(drawable, color(R.color.colorAccent))
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
             textAttention.background = drawable
@@ -64,7 +65,7 @@ class RegexModifyActivity : BaseActivity(), AnkoLogger {
     /**
      * 用于监听用户所选择的短信内容部分
      */
-    val contentSelectionWatcher:Runnable by lazy {
+    private val contentSelectionWatcher: Runnable by lazy {
 
         Runnable {
             if (textContent.selectionStart != textContent.selectionEnd) {
@@ -76,8 +77,6 @@ class RegexModifyActivity : BaseActivity(), AnkoLogger {
         }
     }
 
-
-    private val REGEX_TEMPLATE = "%s.*?%s"
 
     /**
      * 自动生成正则表达式,根据字符串start -> end 间的内容自动选择正则表达式
