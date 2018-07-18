@@ -6,7 +6,7 @@ import android.content.ClipboardManager
 import android.content.Context
 import android.content.Intent
 import android.os.Build
-import android.support.v7.app.NotificationCompat
+import android.support.v4.app.NotificationCompat
 import tech.summerly.smshelper.R
 import tech.summerly.smshelper.activity.NotificationHandleActivity
 import tech.summerly.smshelper.activity.NotificationHandleActivity.Companion.ACTION_COPY
@@ -28,6 +28,8 @@ import tech.summerly.smshelper.receiver.MessageReceiver.Companion.NAME_MESSAGE
 fun Context.copyToClipboard(code: String) = with(getSystemService(Context.CLIPBOARD_SERVICE)) {
     (this as ClipboardManager).primaryClip = android.content.ClipData.newPlainText("code", code)
 }
+
+private const val CHANNEL_ID = "test"
 
 /**
  * 弹出验证码解析结果的 notification
@@ -52,7 +54,7 @@ fun Context.showContentInfo(message: Message) {
     val updateIntent = PendingIntent.getActivity(this, 99,
             update, PendingIntent.FLAG_UPDATE_CURRENT)
 
-    val builder = NotificationCompat.Builder(this)
+    val builder = NotificationCompat.Builder(this, CHANNEL_ID)
             .setSmallIcon(R.drawable.icon)
             .setAutoCancel(true)
             .setContentTitle(message.number)

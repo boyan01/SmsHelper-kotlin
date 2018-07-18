@@ -38,10 +38,10 @@ class SmsConfigActivity : BaseActivity(), AnkoLogger {
     private fun initList() {
         listSmsConfig.layoutManager = LinearLayoutManager(this)
         listSmsConfig.addItemDecoration(DividerItemDecoration(this, LinearLayoutManager.VERTICAL))
-        listSmsConfig.adapter = SmsConfigListAdapter(smsConfigs, {
+        listSmsConfig.adapter = SmsConfigListAdapter(smsConfigs) {
             info(it.toString())
             startActivity<RegexModifyActivity>(NAME_CONFIG to it)
-        })
+        }
 
         listSmsConfig.setSwipeAble({
             val smsConfig = smsConfigs.removeAt(it)
@@ -69,7 +69,7 @@ class SmsConfigActivity : BaseActivity(), AnkoLogger {
     private fun refreshList() {
         smsConfigs.clear()
         smsConfigs.addAll(SmsConfigDataSource.dataSource.getAll())
-        listSmsConfig.adapter.notifyDataSetChanged()
+        listSmsConfig.adapter!!.notifyDataSetChanged()
     }
 
     override fun hasBackArrow() = true
@@ -143,7 +143,7 @@ class SmsConfigActivity : BaseActivity(), AnkoLogger {
             return Holder(view)
         }
 
-        class Holder(itemView: View?) : RecyclerView.ViewHolder(itemView)
+        class Holder(itemView: View) : RecyclerView.ViewHolder(itemView)
     }
 
 
@@ -160,23 +160,23 @@ class SmsConfigActivity : BaseActivity(), AnkoLogger {
         var removed: Pair<Int, T?> = 0 to null
 
         //不响应 move 事件
-        override fun onMove(recyclerView: RecyclerView?, viewHolder: RecyclerView.ViewHolder?, target: RecyclerView.ViewHolder?) = false
+        override fun onMove(recyclerView: RecyclerView, viewHolder: RecyclerView.ViewHolder, target: RecyclerView.ViewHolder) = false
 
         override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
 
             removed = viewHolder.adapterPosition to onSwiped(viewHolder.adapterPosition)//记录下最近移除的条目
-            this@setSwipeAble.adapter.notifyItemRemoved(viewHolder.adapterPosition)
+            this@setSwipeAble.adapter!!.notifyItemRemoved(viewHolder.adapterPosition)
             Snackbar.make(this@setSwipeAble, "刚刚进行了删除操作,是否撤销?", Snackbar.LENGTH_LONG).setAction("撤销", {
                 onRevoked(removed)
-                this@setSwipeAble.adapter.notifyItemInserted(removed.first)
+                this@setSwipeAble.adapter!!.notifyItemInserted(removed.first)
             }).show()
         }
 
-        override fun onChildDraw(c: Canvas?, recyclerView: RecyclerView, viewHolder: RecyclerView.ViewHolder, dX: Float, dY: Float, actionState: Int, isCurrentlyActive: Boolean) {
+        override fun onChildDraw(c: Canvas, recyclerView: RecyclerView, viewHolder: RecyclerView.ViewHolder, dX: Float, dY: Float, actionState: Int, isCurrentlyActive: Boolean) {
             viewHolder.itemView.scrollTo(-dX.toInt(), 0)
         }
 
-        override fun clearView(recyclerView: RecyclerView?, viewHolder: RecyclerView.ViewHolder) {
+        override fun clearView(recyclerView: RecyclerView, viewHolder: RecyclerView.ViewHolder) {
             super.clearView(recyclerView, viewHolder)
             //防止view的复用导致撤销删除错位的bug,移除view的时候,view回滚到原来的状态,
             viewHolder.itemView.scrollTo(0, 0)
