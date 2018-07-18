@@ -1,8 +1,8 @@
 package tech.summerly.smshelper.activity.base
 
 import android.os.Bundle
-import android.support.v4.graphics.drawable.DrawableCompat
-import android.support.v7.app.AppCompatActivity
+import androidx.core.graphics.drawable.DrawableCompat
+import androidx.appcompat.app.AppCompatActivity
 import android.view.MenuItem
 import tech.summerly.smshelper.AppContext
 import tech.summerly.smshelper.R

@@ -4,11 +4,11 @@ import android.content.ClipboardManager
 import android.content.Context
 import android.graphics.Canvas
 import android.os.Bundle
-import android.support.design.widget.Snackbar
-import android.support.v7.widget.DividerItemDecoration
-import android.support.v7.widget.LinearLayoutManager
-import android.support.v7.widget.RecyclerView
-import android.support.v7.widget.helper.ItemTouchHelper
+import com.google.android.material.snackbar.Snackbar
+import androidx.recyclerview.widget.DividerItemDecoration
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import androidx.recyclerview.widget.ItemTouchHelper
 import android.view.*
 import kotlinx.android.synthetic.main.activity_sms_config.*
 import kotlinx.android.synthetic.main.item_sms_config.view.*

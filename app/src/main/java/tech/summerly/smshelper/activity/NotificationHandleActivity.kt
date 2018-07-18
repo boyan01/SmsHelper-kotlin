@@ -15,11 +15,19 @@ import tech.summerly.smshelper.receiver.MessageReceiver
 import tech.summerly.smshelper.receiver.MessageReceiver.Companion.ID_NOTIFICATION_CODE
 import tech.summerly.smshelper.receiver.MessageReceiver.Companion.NAME_MESSAGE
 
+/**
+ * handle notification event
+ *
+ * @author YangBin
+ */
 class NotificationHandleActivity : Activity() {
 
     companion object {
-        val ACTION_COPY = "tech.summerly.action.copy"
-        val ACTION_UPDATE_REGEX = "tech.summerly.action.update_regex"
+
+        const val ACTION_COPY = "tech.summerly.action.copy"
+
+        const val ACTION_UPDATE_REGEX = "tech.summerly.action.update_regex"
+
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {

@@ -16,7 +16,6 @@ import kotlin.reflect.KProperty
  * </pre>
  */
 object DelegateExt {
-    @Deprecated("will not use...", ReplaceWith("PreferenceManage.getDefault....", ""))
     fun <T> preference(name: String, default: T, context: Context = AppContext.instance)
             = Preference(context, name, default)
 }

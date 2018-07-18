@@ -11,7 +11,6 @@ import android.preference.PreferenceManager
 import tech.summerly.smshelper.AppContext
 import tech.summerly.smshelper.R
 import tech.summerly.smshelper.activity.base.AppCompatPreferenceActivity
-import tech.summerly.smshelper.extention.DelegateExt
 import tech.summerly.smshelper.extention.log
 import tech.summerly.smshelper.extention.toast
 
@@ -66,10 +65,10 @@ class MainActivity : AppCompatPreferenceActivity() {
             System.arraycopy(mHints, 1, mHints, 0, mHints.size - 1)
             mHints[mHints.size - 1] = SystemClock.uptimeMillis()
             if (SystemClock.uptimeMillis() - mHints[0] <= 500) {
-                var isPreferenceSimulateShow by DelegateExt.preference("isPreferenceSimulateShow", false)
+                val preferences = PreferenceManager.getDefaultSharedPreferences(this)
+                val isPreferenceSimulateShow = preferences.getBoolean("isPreferenceSimulateShow", false)
                 if (!isPreferenceSimulateShow) {
-                    @Suppress("UNUSED_VALUE")
-                    isPreferenceSimulateShow = true
+                    preferences.edit().putBoolean("isPreferenceSimulateShow", true).apply()
                     (preferenceScreen.findPreference(getString(R.string.key_setting_category_about)) as PreferenceCategory).addPreference(preferenceSimulate)
                 }
             }

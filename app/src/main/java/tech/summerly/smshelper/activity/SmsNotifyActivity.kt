@@ -4,7 +4,7 @@ import android.app.Activity
 import android.app.Dialog
 import android.content.Intent
 import android.os.Bundle
-import android.support.v7.app.AlertDialog
+import androidx.appcompat.app.AlertDialog
 import tech.summerly.smshelper.R
 import tech.summerly.smshelper.data.Message
 import tech.summerly.smshelper.extention.string

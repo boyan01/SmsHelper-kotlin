@@ -2,7 +2,7 @@ package tech.summerly.smshelper.extention
 
 import android.content.Context
 import android.os.Build
-import android.support.annotation.ColorRes
+import androidx.annotation.ColorRes
 import android.util.Log
 import android.widget.Toast
 import tech.summerly.smshelper.AppContext

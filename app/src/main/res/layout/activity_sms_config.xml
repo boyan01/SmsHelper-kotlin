@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <android.support.constraint.ConstraintLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/emptyListLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -35,16 +35,16 @@
             tools:text="list is empty"
             tools:textStyle="bold"
             tools:typeface="serif" />
-    </android.support.constraint.ConstraintLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 
-    <android.support.v7.widget.RecyclerView
+    <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/listSmsConfig"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         tools:context="tech.summerly.smshelper.activity.SmsConfigActivity"
         tools:listitem="@layout/item_sms_config">
 
-    </android.support.v7.widget.RecyclerView>
+    </androidx.recyclerview.widget.RecyclerView>
 </FrameLayout>
 

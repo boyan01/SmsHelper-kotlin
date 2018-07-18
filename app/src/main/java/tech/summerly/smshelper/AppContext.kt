@@ -16,28 +16,30 @@ import kotlin.properties.Delegates
 class AppContext : Application() {
 
     companion object {
-        var instance by Delegates.notNull<AppContext>()
+
+        @Suppress("ObjectPropertyName")
+        private var _instance: AppContext? = null
+
+        val instance get() = _instance!!
     }
 
     override fun onCreate() {
         super.onCreate()
-        instance = this
+        _instance = this
     }
 
-    private val activities = mutableListOf<Activity>()
 
+    @Deprecated("...")
     fun register(activity: Activity) {
-        activities.add(activity)
+        //do nothing
     }
 
+    @Deprecated("...")
     fun unRegister(activity: Activity) {
-        activities.remove(activity)
+        //do nothing
     }
 
     fun exit() {
-        val activityList = activities.toList()
-        activityList.forEach {
-            it.finish()
-        }
+
     }
 }

@@ -6,7 +6,7 @@ import android.content.ClipboardManager
 import android.content.Context
 import android.content.Intent
 import android.os.Build
-import android.support.v4.app.NotificationCompat
+import androidx.core.app.NotificationCompat
 import tech.summerly.smshelper.R
 import tech.summerly.smshelper.activity.NotificationHandleActivity
 import tech.summerly.smshelper.activity.NotificationHandleActivity.Companion.ACTION_COPY
