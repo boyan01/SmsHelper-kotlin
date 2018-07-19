@@ -71,6 +71,7 @@ class MessageReceiver : BroadcastReceiver() {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                 SmsMessage.createFromPdu(it as ByteArray, format)
             } else {
+                @Suppress("DEPRECATION")
                 SmsMessage.createFromPdu(it as ByteArray)
             }
         }

@@ -1,10 +1,9 @@
 package tech.summerly.smshelper.activity
 
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
-import androidx.core.content.ContextCompat
-import androidx.core.graphics.drawable.DrawableCompat
 import android.text.Editable
 import android.text.Spannable
 import android.text.SpannableString
@@ -14,10 +13,10 @@ import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.view.animation.AnimationUtils
+import androidx.core.content.ContextCompat
+import androidx.core.graphics.drawable.DrawableCompat
 import kotlinx.android.synthetic.main.activity_regex_modify.*
 import kotlinx.android.synthetic.main.window_pop_regex.*
-import org.jetbrains.anko.AnkoLogger
-import org.jetbrains.anko.alert
 import tech.summerly.smshelper.R
 import tech.summerly.smshelper.activity.base.BaseActivity
 import tech.summerly.smshelper.data.SmsConfig
@@ -30,7 +29,7 @@ import tech.summerly.smshelper.extention.toast
 /**
  * 此 activity 启动模式为 single task
  */
-class RegexModifyActivity : BaseActivity(), AnkoLogger {
+class RegexModifyActivity : BaseActivity() {
 
     companion object {
         const val NAME_CONFIG = "smsConfig"
@@ -216,11 +215,11 @@ class RegexModifyActivity : BaseActivity(), AnkoLogger {
         stringConsole.append(getString(R.string.regex_modify_activity_console_regex))
 
         val rangeList = ArrayList<IntRange>()//用列表将匹配到的字符串区间记录下来
-        content.replace(Regex(regex), {
+        content.replace(Regex(regex)) {
             rangeList.add(it.range)
             stringConsole.append(it.value.replace(' ', '_')).append(" ")//使用 _ 代替结果中的空格
             it.value
-        })
+        }
         rangeList.forEach {
             val spanFore = ForegroundColorSpan(color(R.color.colorPrimaryDark))
             ss.setSpan(spanFore, it.first, it.last + 1, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
@@ -236,26 +235,28 @@ class RegexModifyActivity : BaseActivity(), AnkoLogger {
     override fun onBackPressed() {
         //如果没做改变
         if (smsConfig == null || smsConfig?.regex == null ||
-                smsConfig?.regex?.equals(editRegex.text.toString()) ?: false) {
+                smsConfig?.regex?.equals(editRegex.text.toString()) == true) {
             finish()
             return
         }
 
-        @Suppress("DEPRECATION")
-        val iconWarning = resources.getDrawable(R.drawable.ic_warning_black_24dp)
+        val iconWarning = ContextCompat.getDrawable(this, R.drawable.ic_warning_black_24dp)
+                ?: return
         DrawableCompat.setTint(iconWarning, color(R.color.colorError))
-        alert {
-            icon = iconWarning
-            title = "修改未保存"
-            message = "是否完成保存再退出?"
-            positiveButton("保存") {
-                saveRegexToDb()
-                finish()
-            }
-            negativeButton("否") {
-                finish()
-            }
-        }.show()
+
+        //fixme
+//        alert {
+//            icon = iconWarning
+//            title = "修改未保存"
+//            message = "是否完成保存再退出?"
+//            positiveButton("保存") {
+//                saveRegexToDb()
+//                finish()
+//            }
+//            negativeButton("否") {
+//                finish()
+//            }
+//        }.show()
     }
 
     override fun onNewIntent(intent: Intent) {

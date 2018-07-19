@@ -1,9 +1,10 @@
 package tech.summerly.smshelper.activity.base
 
+import android.annotation.SuppressLint
 import android.os.Bundle
-import androidx.core.graphics.drawable.DrawableCompat
-import androidx.appcompat.app.AppCompatActivity
 import android.view.MenuItem
+import androidx.appcompat.app.AppCompatActivity
+import androidx.core.graphics.drawable.DrawableCompat
 import tech.summerly.smshelper.AppContext
 import tech.summerly.smshelper.R
 import tech.summerly.smshelper.extention.color
@@ -17,8 +18,8 @@ import tech.summerly.smshelper.extention.color
  *     version: 1.0
  * </pre>
  */
+@SuppressLint("Registered")
 open class BaseActivity : AppCompatActivity() {
-
 
     @Suppress("DEPRECATION")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -35,13 +36,12 @@ open class BaseActivity : AppCompatActivity() {
 
     protected open fun hasBackArrow() = false
 
-
     override fun onDestroy() {
         super.onDestroy()
         AppContext.instance.unRegister(this)
     }
 
-    override  fun onOptionsItemSelected(item: MenuItem): Boolean {
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             android.R.id.home -> onBackPressed()
         }

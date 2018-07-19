@@ -4,6 +4,8 @@ apply plugin: 'kotlin-android'
 
 apply plugin: 'kotlin-android-extensions'
 
+apply plugin: 'kotlin-kapt'
+
 android {
 
     signingConfigs {
@@ -11,14 +13,14 @@ android {
         }
     }
 
-    compileSdkVersion 'android-P'
+    compileSdkVersion 28
 
     defaultConfig {
         applicationId "tech.summerly.smshelper"
         minSdkVersion 21
         targetSdkVersion 28
-        versionCode 4
-        versionName "1.2.1"
+        versionCode 5
+        versionName "1.2.2"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
@@ -29,33 +31,24 @@ android {
         }
     }
 
-    sourceSets {
-        test.java.srcDirs += 'src/test/kotlin'
-        androidTest.java.srcDirs += 'src/androidTest/kotlin'
-    }
-
 }
 
 dependencies {
     def room_version = "2.0.0-beta01"
 
-    implementation fileTree(include: ['*.jar'], dir: 'libs')
     implementation 'androidx.constraintlayout:constraintlayout:2.0.0-alpha1'
     implementation 'com.google.android.material:material:1.0.0-beta01'
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
     implementation 'androidx.appcompat:appcompat:1.0.0-beta01'
     implementation 'androidx.recyclerview:recyclerview:1.0.0-beta01'
-    implementation "org.jetbrains.anko:anko-commons:$anko_version"
-
+    implementation "androidx.preference:preference:1.0.0-beta01"
     //aac
     implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:2.0.0-beta01"
     implementation "androidx.room:room-runtime:$room_version"
-    annotationProcessor "androidx.room:room-compiler:$room_version"
+    kapt "androidx.room:room-compiler:$room_version"
 
     // Required for instrumented tests
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'androidx.test:runner:1.1.0-alpha3'
-    androidTestImplementation('androidx.test.espresso:espresso-core:3.1.0-alpha3', {
-        exclude group: 'com.android.support', module: 'support-annotations'
-    })
+    androidTestImplementation('androidx.test.espresso:espresso-core:3.1.0-alpha3')
 }

@@ -2,7 +2,6 @@ package tech.summerly.smshelper
 
 import android.app.Activity
 import android.app.Application
-import kotlin.properties.Delegates
 
 /**
  * <pre>
@@ -17,15 +16,14 @@ class AppContext : Application() {
 
     companion object {
 
-        @Suppress("ObjectPropertyName")
-        private var _instance: AppContext? = null
+        private var sInstance: AppContext? = null
 
-        val instance get() = _instance!!
+        val instance get() = sInstance!!
     }
 
     override fun onCreate() {
         super.onCreate()
-        _instance = this
+        sInstance = this
     }
 
 

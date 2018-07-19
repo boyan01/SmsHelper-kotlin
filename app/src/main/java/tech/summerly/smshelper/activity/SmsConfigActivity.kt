@@ -2,28 +2,25 @@ package tech.summerly.smshelper.activity
 
 import android.content.ClipboardManager
 import android.content.Context
+import android.content.Intent
 import android.graphics.Canvas
 import android.os.Bundle
-import com.google.android.material.snackbar.Snackbar
+import android.view.*
 import androidx.recyclerview.widget.DividerItemDecoration
+import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import androidx.recyclerview.widget.ItemTouchHelper
-import android.view.*
+import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.activity_sms_config.*
 import kotlinx.android.synthetic.main.item_sms_config.view.*
-import org.jetbrains.anko.*
 import tech.summerly.smshelper.R
 import tech.summerly.smshelper.activity.RegexModifyActivity.Companion.NAME_CONFIG
 import tech.summerly.smshelper.activity.base.BaseActivity
 import tech.summerly.smshelper.data.SmsConfig
 import tech.summerly.smshelper.data.datasource.SmsConfigDataSource
-import tech.summerly.smshelper.extention.copyToClipboard
-import tech.summerly.smshelper.extention.getObjectFromString
-import tech.summerly.smshelper.extention.serialize
-import tech.summerly.smshelper.extention.toast
+import tech.summerly.smshelper.extention.*
 
-class SmsConfigActivity : BaseActivity(), AnkoLogger {
+class SmsConfigActivity : BaseActivity() {
 
 
     val smsConfigs: ArrayList<SmsConfig> = ArrayList()
@@ -39,8 +36,10 @@ class SmsConfigActivity : BaseActivity(), AnkoLogger {
         listSmsConfig.layoutManager = LinearLayoutManager(this)
         listSmsConfig.addItemDecoration(DividerItemDecoration(this, LinearLayoutManager.VERTICAL))
         listSmsConfig.adapter = SmsConfigListAdapter(smsConfigs) {
-            info(it.toString())
-            startActivity<RegexModifyActivity>(NAME_CONFIG to it)
+            log(it.toString())
+            val intent = Intent(this, RegexModifyActivity::class.java)
+            intent.putExtra(NAME_CONFIG, it)
+            startActivity(intent)
         }
 
         listSmsConfig.setSwipeAble({
@@ -58,7 +57,6 @@ class SmsConfigActivity : BaseActivity(), AnkoLogger {
 
     override fun onStart() {
         super.onStart()
-        info("onStart : 刷新列表")
         refreshList()
     }
 
@@ -91,7 +89,6 @@ class SmsConfigActivity : BaseActivity(), AnkoLogger {
 
         val serialization = smsConfigs.serialize()
         copyToClipboard(serialization)
-        info { "复制了: $serialization" }
         toast("已成功复制到剪切板.")
     }
 
@@ -104,24 +101,21 @@ class SmsConfigActivity : BaseActivity(), AnkoLogger {
                 (this as android.text.ClipboardManager).text.toString()
         }
 
-        info("clipText : $clipText")
+        log("clipText : $clipText")
 
         val arrayList = clipText.getObjectFromString<ArrayList<SmsConfig>>()
         if (arrayList == null) {
             toast("导入失败.")
             return
         }
-        info("arrayList = $arrayList")
-        doAsync {
-            arrayList.forEach {
-                SmsConfigDataSource.dataSource.deleteByNumber(it.number)
-                SmsConfigDataSource.dataSource.insert(it.copy(id = -1))
-            }
-            uiThread {
-                toast("导入成功")
-                refreshList()
-            }
+
+        //fixme work thread
+        arrayList.forEach {
+            SmsConfigDataSource.dataSource.deleteByNumber(it.number)
+            SmsConfigDataSource.dataSource.insert(it.copy(id = -1))
         }
+        toast("导入成功")
+        refreshList()
     }
 
     class SmsConfigListAdapter(val configs: List<SmsConfig>, val itemClick: ((SmsConfig) -> Unit)? = null) : RecyclerView.Adapter<SmsConfigListAdapter.Holder>() {

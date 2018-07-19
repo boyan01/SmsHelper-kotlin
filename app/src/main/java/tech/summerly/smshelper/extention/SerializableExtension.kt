@@ -1,7 +1,6 @@
 package tech.summerly.smshelper.extention
 
 import android.util.Base64
-import org.jetbrains.anko.attempt
 import java.io.*
 
 /**
