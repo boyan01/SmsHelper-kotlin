@@ -23,6 +23,10 @@ fun Any.log(message: String?, tag: String = this.javaClass.name.replace("tech.su
     }
 }
 
+fun log(message: () -> String) {
+
+}
+
 fun Context.toast(message: String, length: Int = Toast.LENGTH_SHORT) {
     Toast.makeText(this, message, length).show()
 }
