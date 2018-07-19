@@ -1,6 +1,8 @@
 package tech.summerly.smshelper.data.database
 
 import android.content.ContentValues
+import android.preference.PreferenceManager
+import tech.summerly.smshelper.AppContext
 import tech.summerly.smshelper.R
 import tech.summerly.smshelper.data.SmsConfig
 import tech.summerly.smshelper.data.database.SmsConfigDbHelper.Companion.CONTENT
@@ -9,7 +11,6 @@ import tech.summerly.smshelper.data.database.SmsConfigDbHelper.Companion.NAME_TA
 import tech.summerly.smshelper.data.database.SmsConfigDbHelper.Companion.NUMBER
 import tech.summerly.smshelper.data.database.SmsConfigDbHelper.Companion.REGEX
 import tech.summerly.smshelper.data.datasource.SmsConfigDataSource
-import tech.summerly.smshelper.extention.DelegateExt
 import tech.summerly.smshelper.extention.string
 
 /**
@@ -26,7 +27,7 @@ object SmsConfigDB : SmsConfigDataSource {
 
     //默认的正则
     private val DEFAULT_REGEX: String by lazy {
-        val regex by DelegateExt.preference(
+        val regex = PreferenceManager.getDefaultSharedPreferences(AppContext.instance).getString(
                 string(R.string.key_setting_default_regex), string(R.string.default_regex))
         regex
     }
